@@ -136,11 +136,11 @@ async function sendGames() {
 
   if (newGames.length > 0) {
     for (var i = 0; i < newGames.length; i++) {
-      fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+      fs.appendFileSync('./log.txt', `\nAdicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
       console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
     }
   } else {
-    fs.appendFileSync('./log.txt', "Nenhum jogo novo adicionado.\n")
+    fs.appendFileSync('./log.txt', "\nNenhum jogo novo adicionado.")
     console.log("Nenhum jogo novo adicionado.")
   }
 
@@ -157,7 +157,7 @@ async function sendGames() {
         if (gameWasRemoved) {
           FreeGame.findOneAndDelete({ "title": result[i].title, "site": result[i].site })
             .then(result => {
-              fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
+              fs.appendFileSync('./log.txt', `\nRemovido o jogo ${result.title} (${result.site}).`)
               console.log(`Removido o jogo ${result.title} (${result.site}).`)
             })
             .catch(err => {
