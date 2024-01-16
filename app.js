@@ -59,18 +59,18 @@ app.get('/log', (req, res) => {
 
 
 
-var interval = (getFirstInterval(16 + 3, 40) * 1000);
+var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
 
 var timing = function(){
     var timer = setInterval(function() {
         console.log('=== ATUALIZANDO ===')
         sendGames();
-        interval = 60000; // 86400000 = 1 dia em milisegundos , fazer pela metade 10 da manha e 10 da noite
+        interval = 43200000; // 86400000 = 1 dia em milisegundos , fazer pela metade (43200000) 8 da manha e 8 da noite
         clearInterval(timer);
         timing();
     }, interval);
 }
 
-sendGames()
+//sendGames()
 timing();
 

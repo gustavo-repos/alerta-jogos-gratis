@@ -146,7 +146,7 @@ async function sendGames() {
 
 
   await FreeGame.find({ "site": "Gog"}) // MUDAR PARA AS OUTRAS PLATAFORMAS 
-    .then(result => {
+    .then(async result => {
       for (var i = 0; i < result.length; i++) {
         var gameWasRemoved = true;
         for (var j = 0; j < freeGames.length; j++) {
@@ -155,7 +155,7 @@ async function sendGames() {
           }    
         }
         if (gameWasRemoved) {
-          FreeGame.findOneAndDelete({ "title": result[i].title, "site": result[i].site })
+          await FreeGame.findOneAndDelete({ "title": result[i].title, "site": result[i].site })
             .then(result => {
               fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
               console.log(`Removido o jogo ${result.title} (${result.site}).`)
@@ -170,8 +170,7 @@ async function sendGames() {
       console.log(err)
     });
 
-    fs.appendFileSync('./log.txt', `\n`)
-
+  fs.appendFileSync('./log.txt', `\n`)
 
 }
 
