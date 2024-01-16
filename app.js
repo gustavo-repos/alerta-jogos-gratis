@@ -59,7 +59,7 @@ app.get('/log', (req, res) => {
 
 
 
-var interval = (getFirstInterval(14, 30) * 1000);
+var interval = (getFirstInterval(15, 0) * 1000);
 
 var timing = function(){
     var timer = setInterval(function() {
@@ -71,7 +71,7 @@ var timing = function(){
     }, interval);
 }
 
-//sendGames()
+sendGames()
 timing();
 
 
