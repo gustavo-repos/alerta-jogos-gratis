@@ -59,19 +59,19 @@ app.get('/log', (req, res) => {
 
 
 
-var interval = (getFirstInterval(10, 0) * 1000);
+var interval = (getFirstInterval(14, 30) * 1000);
 
 var timing = function(){
     var timer = setInterval(function() {
         console.log('=== ATUALIZANDO ===')
         sendGames();
-        interval = 43200000; // 86400000 = 1 dia em milisegundos , fazer pela metade 10 da manha e 10 da noite
+        interval = 3600000; // 86400000 = 1 dia em milisegundos , fazer pela metade 10 da manha e 10 da noite
         clearInterval(timer);
         timing();
     }, interval);
 }
 
-sendGames()
+//sendGames()
 timing();
 
 
