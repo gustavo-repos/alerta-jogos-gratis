@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 22px;
+}
+
+h1 {
+  margin: 0px 0px 22px 0px;
+}
+
+table {
+  width: 100%;
+  max-width: 500px;
+  border-collapse: collapse;
+}
+
+tr {
+  text-align: left;
+}
+
+tr:nth-child(odd) {
+  background-color: #F1F1F1;
+}
+  
+th, td {
+  padding: 8px;
+}
+
+textarea {
+  width: 100%;
+  max-width: 500px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 18px;
+}
