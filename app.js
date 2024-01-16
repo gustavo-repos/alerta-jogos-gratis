@@ -59,7 +59,7 @@ app.get('/log', (req, res) => {
 
 
 
-var interval = (getFirstInterval(16 + 3, 22) * 1000);
+var interval = (getFirstInterval(16 + 3, 40) * 1000);
 
 var timing = function(){
     var timer = setInterval(function() {
