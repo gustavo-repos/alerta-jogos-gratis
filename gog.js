@@ -105,7 +105,7 @@ async function sendGames() {
 
   var date = new Date();  
 
-  fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${date.toLocaleTimeString()}\n`)
+  fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
 
   //var freeGames = await getFreeGames();
 
