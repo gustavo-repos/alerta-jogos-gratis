@@ -122,7 +122,7 @@ async function sendGames() {
 
   var freeGames = await getFreeGames();
 
-  //início dump content
+  //início dummy content
     // var freeGames = gameData;
 
     // if (counter == 1) {
