@@ -12,7 +12,8 @@ const getFreeGames = async () => {
     var freeGames = [];
 
     const browser = await puppeteer.launch({
-      headless: false, // mudar
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
       defaultViewport: null,
       devtools: true
     });
