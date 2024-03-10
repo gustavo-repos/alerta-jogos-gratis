@@ -66,6 +66,17 @@ const getFreeGames = async () => {
         
         }
 
+        function getImages() {
+          var imagesclassArray = document.getElementsByClassName('productcard-thumbnails-slider__image')
+          var imagesSrc = []
+          for (var j = 0; j < imagesclassArray.length; j++) {
+            //console.log('imagesclassArray'+imagesclassArray)
+            imagesSrc.push(imagesclassArray[j].src)
+          }
+          //console.log(imagesSrc)
+          return imagesSrc
+        }
+
         var freeGame = {
 
           title: document.querySelector('h1').innerText, 
@@ -77,6 +88,8 @@ const getFreeGames = async () => {
           processor: findDetail('Processor:'),
 
           memory: findDetail('Memory:'),
+
+          images: getImages(),
 
           graphics: findDetail('Graphics:'),
 
@@ -107,15 +120,17 @@ async function sendGames() {
 
   fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
 
-  //var freeGames = await getFreeGames();
+  var freeGames = await getFreeGames();
 
-  var freeGames = gameData;
+  //início dump content
+    // var freeGames = gameData;
 
-  if (counter == 1) {
-    freeGames[0].title = 'Zeldinha';
-  }
+    // if (counter == 1) {
+    //   freeGames[0].title = 'Zeldinha';
+    // }
 
-  counter++
+    // counter++
+    //fim dump content
 
   var newGames = []
 
@@ -170,7 +185,7 @@ async function sendGames() {
       console.log(err)
     });
 
-  fs.appendFileSync('./log.txt', `\n`)
+  fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
 
 }
 

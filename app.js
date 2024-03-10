@@ -8,7 +8,6 @@ var fs = require('fs');
 const { sendGames } = require('./gog')
 const { getFirstInterval } = require('./time')
 
-
 const app = express();
 
 app.use(express.static('public'));
@@ -17,6 +16,15 @@ app.use(bodyParser.urlencoded({
     extended: true
   }));
 app.use(bodyParser.json());
+
+// autoriza o app, mudar localhost para http://54.233.108.176:3002/games (aws)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8081');
+    //res.header('Access-Control-Allow-Origin', 'http://54.233.108.176:3002');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.set('view engine', 'ejs');
 
@@ -45,16 +53,15 @@ app.get('/log', (req, res) => {
     res.json({ log });
 });
 
-
-// const blog_all_get = (req, res) => {
-//     Blog.find().sort({ createdAt: -1 })
-//     .then(result => {
-//       res.json({ blogs: result} );
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-//   };
+app.get('/scan', (req, res) => {
+    sendGames()
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
 
 
 
@@ -73,4 +80,13 @@ var timing = function(){
 
 //sendGames()
 timing();
+
+
+// retirar essa parte do código
+// const webpush = require('web-push');
+
+// const vapidKeys = webpush.generateVAPIDKeys();
+
+// console.log('Public Key:', vapidKeys.publicKey);
+// console.log('Private Key:', vapidKeys.privateKey);
 

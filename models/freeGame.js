@@ -32,6 +32,10 @@ const freeGameSchema = new Schema({
         type: String,
         required: true
     },
+    images: {
+        type: Array,
+        required: true
+    },
     graphics: {
         type: String,
         required: true
