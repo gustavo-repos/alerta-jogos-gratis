@@ -14,7 +14,7 @@ const getFreeGames = async () => {
     const browser = await puppeteer.launch({
       headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: 'path/to/chrome',
+      executablePath: '/usr/bin/chromium-browser'
     });
   
     // Open a new page
