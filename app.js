@@ -17,10 +17,8 @@ app.use(bodyParser.urlencoded({
   }));
 app.use(bodyParser.json());
 
-// autoriza o app, mudar localhost para http://54.233.108.176:3002/games (aws)
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:8081');
-    //res.header('Access-Control-Allow-Origin', 'http://54.233.108.176:3002');
     res.header('Access-Control-Allow-Methods', 'GET');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
@@ -80,13 +78,3 @@ var timing = function(){
 
 //sendGames()
 timing();
-
-
-// retirar essa parte do código
-// const webpush = require('web-push');
-
-// const vapidKeys = webpush.generateVAPIDKeys();
-
-// console.log('Public Key:', vapidKeys.publicKey);
-// console.log('Private Key:', vapidKeys.privateKey);
-
