@@ -22,6 +22,7 @@ const getFreeGames = async () => {
     // On this new page:
     await page.goto("https://www.gog.com/partner/free_games", {
       waitUntil: "domcontentloaded",
+      timeout: 180000
     });
   
     // Get page data
@@ -44,6 +45,7 @@ const getFreeGames = async () => {
       var url = links[i];
       await page.goto(`${url}`, {
         waitUntil: "domcontentloaded",
+        timeout: 180000
       });
 
       var info = await page.evaluate (() => {
