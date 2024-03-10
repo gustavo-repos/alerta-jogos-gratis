@@ -14,6 +14,7 @@ const getFreeGames = async () => {
     const browser = await puppeteer.launch({
       headless: true, // mudar
       defaultViewport: null,
+      executablePath: '/usr/bin/chromium-browser'
     });
   
     // Open a new page
