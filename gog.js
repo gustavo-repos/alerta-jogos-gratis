@@ -13,7 +13,7 @@ const getFreeGames = async () => {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--single-process'],
       defaultViewport: null,
       devtools: true
     });
