@@ -1,58 +1,61 @@
 const FreeGame = require('./models/freeGame');
 const { gameData } = require('./freeGameTest')
 var fs = require('fs');
-const { makeRequest, getData } = require('./scraper')
+const { makeRequest } = require('./scraper')
 
+async function getFreeGames() {
+  try {
+    const url = "https://www.gog.com/partner/free_games";
+    const document = await makeRequest(url);
 
-// var newGames = [];
+    const baseUrl = document.baseURI; // Obtém o URL base da página
+    console.log(baseUrl)
 
-const getFreeGames = async () => {
+    const links = Array.from(document.getElementsByClassName('product-row__link')).map(element => {
+      element.href
+    });
+    
+    const freeGames = [];
 
-    var freeGames = [];
-
-    const mainPage = await makeRequest('https://www.gog.com/partner/free_games')
-
-    let elements = mainPage.getElementsByClassName('product-row__link')
-
-    let links = [];
-    for (var element of elements) {
-        links.push('https://www.gog.com'+element.href);
-    }
-
-    for (var i = 0; i < links.length; i++) {
-        const gamePage =  await makeRequest(links[i])
-
-          function getImages() {
-            var imagesclassArray = gamePage.getElementsByClassName('productcard-thumbnails-slider__image')
-            var imagesSrc = []
-            for (var j = 0; j < imagesclassArray.length; j++) {
-              imagesSrc.push(imagesclassArray[j].src)
+    for (const link of links) {
+      const info = await makeRequest(link).then(parsedDocument => {
+        function findDetail(detailName) {
+          const classList = parsedDocument.getElementsByClassName('system-requirements__label ng-binding');
+          for (const element of classList) {
+            if (element.innerText === detailName) {
+              return element.nextElementSibling.innerText;
             }
-            return imagesSrc
           }
+          return '-';
+        }
 
-          var freeGame = {
-            title: gamePage.querySelector('h1').textContent.trim(), 
-            site: "Gog", 
-            link: links[i],
-            genre: gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s/g, '').replace(/-/g, ' - '),
-            system: gamePage.getElementsByClassName('details__content table__row-content')[2].textContent.trim(),
-            processor: await getData(
-              '"Processor:","description":"', 
-              links[i].substring(19, links[i].length)),
-            memory: await getData(
-              '"Memory:","description":"', 
-              links[i].substring(19, links[i].length)),
-            images: getImages(),
-            graphics: await getData(
-              '"Graphics:","description":"', 
-              links[i].substring(19, links[i].length)),
-          }
-          freeGames.push(freeGame)
+        function getImages() {
+          const imagesClassArray = parsedDocument.getElementsByClassName('productcard-thumbnails-slider__image');
+          const imagesSrc = Array.from(imagesClassArray, element => element.src);
+          return imagesSrc;
+        }
+
+        return {
+          title: parsedDocument.querySelector('h1').innerText,
+          site: "Gog",
+          link: link,
+          genre: parsedDocument.getElementsByClassName('details__content table__row-content')[0].innerText,
+          system: parsedDocument.getElementsByClassName('details__content table__row-content')[2].innerText,
+          processor: findDetail('Processor:'),
+          memory: findDetail('Memory:'),
+          images: getImages(),
+          graphics: findDetail('Graphics:'),
+        };
+      });
+
+      freeGames.push(info);
     }
 
     return freeGames;
-
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 async function sendGames() {
@@ -101,7 +104,7 @@ async function sendGames() {
   }
 
 
-  await FreeGame.find({ "site": "Gog"}) 
+  await FreeGame.find({ "site": "Gog"}) // MUDAR PARA AS OUTRAS PLATAFORMAS 
     .then(async result => {
       for (var i = 0; i < result.length; i++) {
         var gameWasRemoved = true;
