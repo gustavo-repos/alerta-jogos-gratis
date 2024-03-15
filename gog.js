@@ -19,6 +19,7 @@ const getFreeGames = async () => {
         links.push('https://www.gog.com'+element.href);
     }
 
+    // for (var i = 0; i < 1; i++) {
     for (var i = 0; i < links.length; i++) {
         const gamePage =  await makeRequest(links[i])
 
@@ -35,19 +36,12 @@ const getFreeGames = async () => {
             title: gamePage.querySelector('h1').textContent.trim(), 
             site: "Gog", 
             link: links[i],
-            genre: gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s/g, '').replace(/-/g, ' - '),
-            system: gamePage.getElementsByClassName('details__content table__row-content')[2].textContent.trim(),
-            processor: await getData(
-              '"Processor:","description":"', 
-              links[i].substring(19, links[i].length)),
-            memory: await getData(
-              '"Memory:","description":"', 
-              links[i].substring(19, links[i].length)),
+            genre: gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s+/g, ' '),
+            // .replace(/\s/g, '').replace(/-/g, ' - ')
+            system: gamePage.getElementsByClassName('table__row-content')[2].textContent.trim(),
             images: getImages(),
-            graphics: await getData(
-              '"Graphics:","description":"', 
-              links[i].substring(19, links[i].length)),
           }
+          //console.log(gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s+/g, ' '))
           freeGames.push(freeGame)
     }
 

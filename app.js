@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const FreeGame = require('./models/freeGame');
 var fs = require('fs');
+const UserToken = require('./models/userPushToken');
 
 const { sendGames } = require('./gog')
 const { getFirstInterval } = require('./time')
@@ -20,6 +21,13 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:8081');
     res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://54.233.108.176:3002/');
+    res.header('Access-Control-Allow-Methods', 'POST');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
@@ -61,7 +69,31 @@ app.get('/scan', (req, res) => {
         });
 });
 
+app.post('/pushtokens', (req, res) => {
+    const token = new UserToken(req.body);
+    console.log(req.body)
+    token.save()
+      .then(() => {
+          console.log('token salvo')
+      })
+      .catch(err => {
+        console.log(err);
+      });
+})
 
+
+// const token = new UserToken({
+//     userId: 'idTeste', 
+//     token: 'ExponentPushToken[w8wiJrAdfoMEosnr6WWyw0]'
+// })
+//     token.save()
+//         .then(() => {
+//             console.log('token salvo')
+//         })
+//         .catch(err => {
+//             //res.json({ err: err.message });
+//             console.log(err);
+// });
 
 
 var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
