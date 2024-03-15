@@ -25,12 +25,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://54.233.108.176:3002/');
-    res.header('Access-Control-Allow-Methods', 'POST');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://54.233.108.176:3002/');
+//     res.header('Access-Control-Allow-Methods', 'POST');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// });
 
 app.set('view engine', 'ejs');
 
