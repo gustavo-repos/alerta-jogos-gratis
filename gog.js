@@ -3,6 +3,8 @@ const { gameData } = require('./freeGameTest')
 var fs = require('fs');
 const { makeRequest, getData } = require('./scraper')
 
+const { sendNotification } = require('./notifications')
+
 
 // var newGames = [];
 
@@ -87,6 +89,7 @@ async function sendGames() {
   if (newGames.length > 0) {
     for (var i = 0; i < newGames.length; i++) {
       fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+      sendNotification(`O jogo ${newGames[i].title} foi adicionado na plataforma ${newGames[i].site}!`)
       console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
     }
   } else {

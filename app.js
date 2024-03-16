@@ -6,6 +6,7 @@ const FreeGame = require('./models/freeGame');
 var fs = require('fs');
 const UserToken = require('./models/userPushToken');
 
+const { sendNotification } = require('./notifications')
 const { sendGames } = require('./gog')
 const { getFirstInterval } = require('./time')
 
@@ -68,6 +69,10 @@ app.get('/scan', (req, res) => {
             console.log(err);
         });
 });
+
+app.get('/message', (req, res) => {
+    sendNotification('Teste de mensagem.')
+})
 
 app.post('/pushtokens', (req, res) => {
     const token = new UserToken(req.body);
