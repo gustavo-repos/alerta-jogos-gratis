@@ -72,6 +72,12 @@ app.get('/scan', (req, res) => {
 
 app.get('/message', (req, res) => {
     sendNotification('Teste de mensagem.')
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch(err => {
+            console.log(err);
+        });
 })
 
 app.post('/pushtokens', (req, res) => {

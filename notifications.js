@@ -15,14 +15,11 @@ async function sendNotification(message) {
   //var somePushTokens = ['ExponentPushToken[w8wiJrAdfoMEosnr6WWyw0]']
 
   var database = await UserToken.find()
-  console.log(database)
   var somePushTokens = []
 
   for (var i = 0; i < database.length; i++) {
     somePushTokens.push(database[i].token)
   }
-
-  console.log(somePushTokens)
 
   for (let pushToken of somePushTokens) {
     // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
