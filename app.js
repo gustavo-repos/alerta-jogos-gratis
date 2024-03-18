@@ -96,7 +96,7 @@ app.post('/pushtokens', (req, res) => {
     UserToken.init()
         .then( async ()=>{
             const token = new UserToken(req.body);
-            const result = await UserToken.save();
+            const result = await token.save();
             res.json(result);
         })
         .catch((err) => {
