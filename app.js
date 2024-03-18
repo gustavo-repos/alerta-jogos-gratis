@@ -80,18 +80,29 @@ app.get('/message', (req, res) => {
         });
 })
 
-app.post('/pushtokens', (req, res) => {
-    const token = new UserToken(req.body);
-    console.log(req.body)
-    token.save()
-      .then(() => {
-          console.log('token salvo')
-      })
-      .catch(err => {
-        console.log(err);
-      });
-})
+// app.post('/pushtokens', (req, res) => {
+//     const token = new UserToken(req.body);
+//     console.log(req.body)
+//     token.save()
+//       .then(() => {
+//           console.log('token salvo')
+//       })
+//       .catch(err => {
+//         console.log(err);
+//       });
+// })
 
+app.post('/pushtokens', (req, res) => {
+    UserToken.init()
+        .then( async ()=>{
+            const token = new UserToken(req.body);
+            const result = await UserToken.save();
+            res.json(result);
+        })
+        .catch((err) => {
+            res.json(err.message);
+        });
+})
 
 // const token = new UserToken({
 //     userId: 'idTeste', 
