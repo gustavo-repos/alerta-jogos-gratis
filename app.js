@@ -7,8 +7,12 @@ var fs = require('fs');
 const UserToken = require('./models/userPushToken');
 
 const { sendNotification } = require('./notifications')
-const { sendGames } = require('./gog')
+const { sendGogGames } = require('./gog')
+const { getFreeGames } = require('./epic')
 const { getFirstInterval } = require('./time')
+
+const { main } = require('./newScrapper')
+
 
 const app = express();
 
@@ -61,7 +65,7 @@ app.get('/log', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-    sendGames()
+    sendGogGames()
         .then(() => {
             res.redirect('/')
         })
@@ -123,12 +127,54 @@ var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
 var timing = function(){
     var timer = setInterval(function() {
         console.log('=== ATUALIZANDO ===')
-        sendGames();
+        sendGogGames();
         interval = 43200000; // 86400000 = 1 dia em milisegundos , fazer pela metade (43200000) 8 da manha e 8 da noite
         clearInterval(timer);
         timing();
     }, interval);
 }
 
-//sendGames()
 timing();
+
+
+
+
+
+
+
+// SCRAP
+
+const puppeteer = require('puppeteer-core')
+
+async function extractHrefValues(url) {
+    const browser = await puppeteer.launch({executablePath: '/usr/bin/google-chrome'})
+    const page = await browser.newPage()
+
+    await page.setExtraHTTPHeaders({ 
+		'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36', 
+		'upgrade-insecure-requests': '1', 
+		'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8', 
+		'accept-encoding': 'gzip, deflate, br', 
+		'accept-language': 'en-US,en;q=0.9,en;q=0.8' 
+	}); 
+  
+    await page.goto(url);
+
+    const hrefValues = await page.evaluate(() => {
+        var aTags = document.getElementsByTagName('a')
+        var links = []
+        for (var i = 0; i < aTags.length; i++) {
+            links.push(aTags[i].href)
+        }
+        return links
+    })
+  
+    await browser.close()
+  
+    return hrefValues
+}
+
+extractHrefValues('https://store.epicgames.com/pt-BR/free-games')
+    .then(result => {
+        console.log(result)
+    })

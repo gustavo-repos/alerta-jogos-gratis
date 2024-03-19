@@ -51,7 +51,7 @@ const getFreeGames = async () => {
 
 }
 
-async function sendGames() {
+async function sendGogGames() {
 
   var date = new Date();  
 
@@ -128,4 +128,4 @@ async function sendGames() {
 }
 
 
-module.exports = { sendGames };
+module.exports = { sendGogGames };

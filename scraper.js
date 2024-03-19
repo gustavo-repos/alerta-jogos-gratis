@@ -11,6 +11,7 @@ function makeRequest(url) {
       });
 
       res.on('end', () => {
+        console.log('Dados recebidos:', data); // Adicione este log para depuração
         const { window } = new JSDOM(data);
         resolve(window.document);
       });
@@ -20,9 +21,9 @@ function makeRequest(url) {
   });
 }
 
-async function getData(phrase, endpoint) {
+async function getData(hostname ,endpoint) {
   const options = {
-    hostname: 'www.gog.com',
+    hostname: hostname,
     port: 443,
     path: endpoint,
     method: 'GET'
@@ -35,11 +36,7 @@ async function getData(phrase, endpoint) {
         result += data.toString()
       });
       res.on('end', () => {
-        result = result.replace(/\s{2,}/g, ' ').trim()
-        var start = result.indexOf(phrase)
-        var newstring = result.substring(start+phrase.length, result.length)
-        var end = newstring.indexOf('}')
-        resolve(newstring.substring(0, end-1));
+        console.log(result)
       });
     });
 
@@ -49,17 +46,6 @@ async function getData(phrase, endpoint) {
     });
   });
 }
-
-// async function fetchGameData(phrase, endpoint) {
-//   try {
-//     const data = await getData(phrase, endpoint);
-//     //console.log(data);
-//   } catch (error) {
-//     console.error('Erro:', error);
-//   }
-// }
-
-//fetchGameData('"Processor:","description":"', '/en/game/betrayer');
 
 module.exports = { makeRequest, getData };
 
