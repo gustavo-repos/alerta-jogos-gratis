@@ -148,6 +148,7 @@ process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 const puppeteer = require('puppeteer-core')
 
 async function extractHrefValues(url) {
+    console.log('TESTE:')
     const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
