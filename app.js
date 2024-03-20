@@ -149,7 +149,7 @@ const puppeteer = require('puppeteer-core')
 async function extractHrefValues(url) {
     const browser = await puppeteer.launch({
         executablePath: '/usr/bin/chromium-browser',
-        args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ]
+        args: ['--no-sandbox']
     })
     const page = await browser.newPage()
 
