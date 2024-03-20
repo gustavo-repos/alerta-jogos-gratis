@@ -144,6 +144,8 @@ timing();
 
 // SCRAP
 
+process.env.CHROME_BIN = '/usr/bin/chromium-browser';
+process.env.CHROME_PATH = '/usr/bin/chromium-browser';
 process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 const puppeteer = require('puppeteer-core')
 
