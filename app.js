@@ -147,7 +147,7 @@ timing();
 const puppeteer = require('puppeteer-core')
 
 async function extractHrefValues(url) {
-    const browser = await puppeteer.launch({executablePath: '/usr/bin/google-chrome'})
+    const browser = await puppeteer.launch({executablePath: '/usr/bin/chromium-browser'})
     const page = await browser.newPage()
 
     await page.setExtraHTTPHeaders({ 
