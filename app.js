@@ -185,7 +185,7 @@ async function extractHrefValues(url) {
     return hrefValues
 }
 
-extractHrefValues('https://store.epicgames.com/pt-BR/free-games')
+extractHrefValues('https://www.gog.com/partner/free_games')
     .then(result => {
         console.log(result)
     })
