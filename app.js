@@ -144,6 +144,7 @@ timing();
 
 // SCRAP
 
+process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 const puppeteer = require('puppeteer-core')
 
 async function extractHrefValues(url) {
