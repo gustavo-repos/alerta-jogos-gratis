@@ -161,7 +161,7 @@ puppeteer.use(awsPlugin());
 
 async function extractHrefValues(url) {
     const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser',
+        executablePath: '/snap/bin/chromium',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
