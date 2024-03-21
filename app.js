@@ -144,14 +144,24 @@ timing();
 
 // SCRAP
 
-process.env.CHROME_BIN = '/usr/bin/chromium-browser';
-process.env.CHROME_PATH = '/usr/bin/chromium-browser';
-process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
-const puppeteer = require('puppeteer-core')
+// puppeteer-extra is a drop-in replacement for puppeteer,
+// it augments the installed puppeteer with plugin functionality
+const puppeteer = require('puppeteer-extra');
+// require AWS plugin
+const awsPlugin = require('puppeteer-extra-plugin-aws');
+// add AWS plugin
+puppeteer.use(awsPlugin());
+
+// process.env.CHROME_BIN = '/usr/bin/chromium-browser';
+// process.env.CHROME_PATH = '/usr/bin/chromium-browser';
+// process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+
+
+//const puppeteer = require('puppeteer-core')
 
 async function extractHrefValues(url) {
     const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/google-chrome',
+        executablePath: '/snap/bin/chromium',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
