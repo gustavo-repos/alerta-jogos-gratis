@@ -144,6 +144,10 @@ timing();
 
 // SCRAP
 
+process.env.CHROME_BIN = '/usr/bin/chromium-browser';
+process.env.CHROME_PATH = '/usr/bin/chromium-browser';
+process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality
 const puppeteer = require('puppeteer-extra');
@@ -151,10 +155,6 @@ const puppeteer = require('puppeteer-extra');
 const awsPlugin = require('puppeteer-extra-plugin-aws');
 // add AWS plugin
 puppeteer.use(awsPlugin());
-
-// process.env.CHROME_BIN = '/usr/bin/chromium-browser';
-// process.env.CHROME_PATH = '/usr/bin/chromium-browser';
-// process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 
 
 //const puppeteer = require('puppeteer-core')
