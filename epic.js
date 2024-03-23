@@ -65,16 +65,16 @@ const getFreeGames = async () => {
         //             });
         //     });
 
-        // if (await page.waitForSelector('.css-1bbjmcj')) {
-        //     imgClassName = '.css-1bbjmcj'
-        //     console.log('opcao1')
-        // } else {
-        //     await page.waitForSelector('.css-7i770w')
-        //     imgClassName = '.css-7i770w'
-        //     console.log('opcao2')
-        // }
+        if (await page.waitForSelector('.css-1bbjmcj')) {
+            imgClassName = '.css-1bbjmcj'
+            console.log('opcao1')
+        } else {
+            await page.waitForSelector('.css-7i770w')
+            imgClassName = '.css-7i770w'
+            console.log('opcao2')
+        }
 
-        const data = await page.evaluate(() => {
+        const data = await page.evaluate((imgClassName) => {
 
             const title = document.querySelector('.css-1mzagbj').textContent
 
@@ -86,7 +86,7 @@ const getFreeGames = async () => {
                 genres.push(elements[j].textContent);
             }
 
-            elements = document.querySelectorAll('.css-1bbjmcj');
+            elements = document.querySelectorAll(imgClassName);
             const srcs = []
             for (let j = 0; j < elements.length; j++) {
                 srcs.push(elements[j].src);
