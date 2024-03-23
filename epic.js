@@ -18,7 +18,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
         const page = await browser.newPage()
         await page.setExtraHTTPHeaders(headerOptions); 
-        await page.goto(url);
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
 
         await page.waitForSelector('.css-g3jcms');
 
@@ -42,7 +42,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
         const page = await browser.newPage()
         await page.setExtraHTTPHeaders(headerOptions); 
-        await page.goto(url);
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
 
         await page.waitForSelector('.css-1bbjmcj')
         await page.waitForSelector('.css-1mzagbj')
