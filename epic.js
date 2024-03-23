@@ -86,7 +86,7 @@ const getFreeGames = async () => {
     
     for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) {
-    //for (var i = 52; i < 60; i++) {
+    for (var i = 88; i < 98; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
