@@ -44,6 +44,7 @@ const getFreeGames = async () => {
         await page.setExtraHTTPHeaders(headerOptions); 
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
 
+        console.log(url)
         await page.waitForSelector('.css-1bbjmcj')
         await page.waitForSelector('.css-1mzagbj')
         await page.waitForSelector('.css-vs1xw0')
@@ -75,8 +76,8 @@ const getFreeGames = async () => {
         return data
     }
     
-    //for (var i = 0; i < links.length; i++) {
-    for (var i = 0; i < 180; i++) {
+    for (var i = 0; i < links.length; i++) {
+    //for (var i = 0; i < 180; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
