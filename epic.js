@@ -20,7 +20,7 @@ const getFreeGames = async () => {
         await page.setExtraHTTPHeaders(headerOptions); 
         await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
-        await page.waitForSelector('.css-g3jcms');
+        await page.waitForSelector('.css-g3jcms', {timeout: 0});
 
         const hrefValues = await page.evaluate(() => {
             const elements = document.querySelectorAll('.css-g3jcms');
