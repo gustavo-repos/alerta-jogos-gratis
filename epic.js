@@ -56,7 +56,7 @@ const getFreeGames = async () => {
             imgClassName = '.css-7i770w'
         }
 
-        const data = await page.evaluate(() => {
+        const data = await page.evaluate((imgClassName) => {
 
             const title = document.querySelector('.css-1mzagbj').textContent
 
