@@ -27,7 +27,7 @@ const getFreeGames = async () => {
             const hrefs = [];
             for (let i = 0; i < elements.length; i++) {
               hrefs.push(elements[i].href);
-              console.log(elements[i].href)
+              console.log('parte1:'+elements[i].href)
             }
             return hrefs;
           });
@@ -40,7 +40,7 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(url) {
-        const browser = await puppeteer.launch(launchOptions)
+        //const browser = await puppeteer.launch(launchOptions)
         const page = await browser.newPage()
         await page.setExtraHTTPHeaders(headerOptions); 
         page.goto(url);
@@ -80,12 +80,12 @@ const getFreeGames = async () => {
 
         })
         
-        await browser.close()
+        //await browser.close()
         
         return data
     }
     
-    //var browser = await puppeteer.launch(launchOptions)
+    var browser = await puppeteer.launch(launchOptions)
     //for (var i = 0; i < links.length; i++) {
     for (var i = 0; i < 20; i++) {
         var scrapedData = await scrapData(links[i])        
@@ -99,7 +99,7 @@ const getFreeGames = async () => {
           }
           freeGames.push(freeGame)
     }
-    //await browser.close()
+    await browser.close()
     return freeGames;
 }
 
