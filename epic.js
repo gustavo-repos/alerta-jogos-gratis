@@ -45,13 +45,13 @@ const getFreeGames = async () => {
         await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
         console.log(url)
-        await page.waitForSelector('.css-1mzagbj')
-        await page.waitForSelector('.css-vs1xw0')
+        await page.waitForSelector('.css-1mzagbj', {timeout: 0})
+        await page.waitForSelector('.css-vs1xw0', {timeout: 0})
         //await page.waitForSelector('.css-1bbjmcj')
         
         var imgClassName
         try {
-            await page.waitForSelector('.css-1bbjmcj', {timeout: 3000})
+            await page.waitForSelector('.css-1bbjmcj', {timeout: 30000})
             imgClassName = '.css-1bbjmcj'
         } catch (error) {
             imgClassName = '.css-7i770w'
