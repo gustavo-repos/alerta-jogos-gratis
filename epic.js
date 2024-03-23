@@ -51,9 +51,11 @@ const getFreeGames = async () => {
         try {
             await page.waitForSelector('.css-1bbjmcj')
             imgClassName = '.css-1bbjmcj'
+            console.log('opcao 1')
         } catch (error) {
             await page.waitForSelector('.css-7i770w')
             imgClassName = '.css-7i770w'
+            console.log('opcao 2')
         }
 
         const data = await page.evaluate((imgClassName) => {
