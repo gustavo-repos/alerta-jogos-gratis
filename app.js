@@ -7,11 +7,11 @@ var fs = require('fs');
 const UserToken = require('./models/userPushToken');
 
 const { sendNotification } = require('./notifications')
-const { sendGogGames } = require('./gog')
 const { getFreeGames } = require('./epic')
 const { getFirstInterval } = require('./time')
 
-const { main } = require('./newScrapper')
+const { sendEpicGames } = require('./epic')
+const { sendGogGames } = require('./gog')
 
 
 const app = express();
@@ -58,7 +58,8 @@ app.get('/log', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-    sendGogGames()
+    //Promise.all([sendGogGames(), sendEpicGames()])
+        sendEpicGames()
         .then(() => {
             res.redirect('/')
         })
@@ -120,111 +121,14 @@ var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
 var timing = function(){
     var timer = setInterval(function() {
         console.log('=== ATUALIZANDO ===')
-        sendGogGames();
+        sendGogGames()
+        sendEpicGames()
         interval = 43200000; // 86400000 = 1 dia em milisegundos , fazer pela metade (43200000) 8 da manha e 8 da noite
         clearInterval(timer);
         timing();
     }, interval);
 }
 
-timing();
+timing()
 
-
-
-
-
-
-
-// SCRAP
-
-process.env.CHROME_BIN = '/usr/bin/chromium-browser';
-process.env.CHROME_PATH = '/usr/bin/chromium-browser';
-process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
-
-// puppeteer-extra is a drop-in replacement for puppeteer,
-// it augments the installed puppeteer with plugin functionality
-//const puppeteer = require('puppeteer-extra');
-// require AWS plugin
-//const awsPlugin = require('puppeteer-extra-plugin-aws');
-// add AWS plugin
-//puppeteer.use(awsPlugin());
-
-
-const puppeteer = require('puppeteer-core')
-
-async function extractHrefValues(url) {
-    const browser = await puppeteer.launch({
-        executablePath: '/snap/bin/chromium',
-        args: 
-        [
-            '--disable-background-timer-throttling',
-            '--disable-breakpad',
-            '--disable-client-side-phishing-detection',
-            '--disable-cloud-import',
-            '--disable-default-apps',
-            '--disable-dev-shm-usage',
-            '--disable-extensions',
-            '--disable-gesture-typing',
-            '--disable-hang-monitor',
-            '--disable-infobars',
-            '--disable-notifications',
-            '--disable-offer-store-unmasked-wallet-cards',
-            '--disable-offer-upload-credit-cards',
-            '--disable-popup-blocking',
-            '--disable-print-preview',
-            '--disable-prompt-on-repost',
-            '--disable-setuid-sandbox',
-            '--disable-speech-api',
-            '--disable-sync',
-            '--disable-tab-for-desktop-share',
-            '--disable-translate',
-            '--disable-voice-input',
-            '--disable-wake-on-wifi',
-            '--enable-async-dns',
-            '--enable-simple-cache-backend',
-            '--enable-tcp-fast-open',
-            '--enable-webgl',
-            '--hide-scrollbars',
-            '--metrics-recording-only',
-            '--mute-audio',
-            '--no-default-browser-check',
-            '--no-first-run',
-            '--no-pings',
-            '--no-sandbox',
-            '--no-zygote',
-            '--password-store=basic',
-            '--prerender-from-omnibox=disabled',
-            '--use-gl=swiftshader',
-            '--use-mock-keychain',
-            ]
-    })
-    const page = await browser.newPage()
-
-    await page.setExtraHTTPHeaders({ 
-		'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36', 
-		'upgrade-insecure-requests': '1', 
-		'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8', 
-		'accept-encoding': 'gzip, deflate, br', 
-		'accept-language': 'en-US,en;q=0.9,en;q=0.8' 
-	}); 
-  
-    await page.goto(url);
-
-    const hrefValues = await page.evaluate(() => {
-        var aTags = document.getElementsByTagName('a')
-        var links = []
-        for (var i = 0; i < aTags.length; i++) {
-            links.push(aTags[i].href)
-        }
-        return links
-    })
-  
-    await browser.close()
-  
-    return hrefValues
-}
-
-extractHrefValues('https://store.epicgames.com/en-US/free-games')
-    .then(result => {
-        console.log(result)
-    })
+//sendEpicGames()

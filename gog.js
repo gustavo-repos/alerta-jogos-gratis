@@ -21,7 +21,6 @@ const getFreeGames = async () => {
         links.push('https://www.gog.com'+element.href);
     }
 
-    // for (var i = 0; i < 1; i++) {
     for (var i = 0; i < links.length; i++) {
         const gamePage =  await makeRequest(links[i])
 
@@ -40,7 +39,7 @@ const getFreeGames = async () => {
             link: links[i],
             genre: gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s+/g, ' '),
             // .replace(/\s/g, '').replace(/-/g, ' - ')
-            system: gamePage.getElementsByClassName('table__row-content')[2].textContent.trim(),
+            //system: gamePage.getElementsByClassName('table__row-content')[2].textContent.trim(),
             images: getImages(),
           }
           //console.log(gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s+/g, ' '))
@@ -93,8 +92,8 @@ async function sendGogGames() {
       console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
     }
   } else {
-    fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado.\n`)
-    console.log("Nenhum jogo novo adicionado.")
+    fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Gog.\n`)
+    console.log("Nenhum jogo novo adicionado na Gog.")
   }
 
 
