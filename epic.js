@@ -51,7 +51,7 @@ const getFreeGames = async () => {
         
         var imgClassName
         try {
-            await page.waitForSelector('.css-1bbjmcj', {timeout: 1000})
+            await page.waitForSelector('.css-1bbjmcj', {timeout: 3000})
             imgClassName = '.css-1bbjmcj'
         } catch (error) {
             imgClassName = '.css-7i770w'
@@ -84,9 +84,9 @@ const getFreeGames = async () => {
         return data
     }
     
-    //for (var i = 0; i < links.length; i++) {
+    for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) {
-    for (var i = 52; i < 60; i++) {
+    //for (var i = 52; i < 60; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
