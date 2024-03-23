@@ -44,21 +44,37 @@ const getFreeGames = async () => {
         await page.setExtraHTTPHeaders(headerOptions); 
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
 
-        //console.log(url)
+        console.log(url)
         await page.waitForSelector('.css-1mzagbj')
         await page.waitForSelector('.css-vs1xw0')
+        await page.waitForSelector('.css-1bbjmcj')
         var imgClassName
-        try {
-            await page.waitForSelector('.css-1bbjmcj')
-            imgClassName = '.css-1bbjmcj'
-            console.log('opcao 1')
-        } catch (error) {
-            await page.waitForSelector('.css-7i770w')
-            imgClassName = '.css-7i770w'
-            console.log('opcao 2')
-        }
+        // page.waitForSelector('.css-1bbjmcj')
+        //     .then(() => {
+        //         imgClassName = '.css-1bbjmcj'
+        //         console.log('opcao1')
+        //     })
+        //     .catch((err) => {
+        //         page.waitForSelector('.css-7i770w')
+        //             .then(() => {
+        //                 imgClassName = '.css-7i770w'
+        //                 console.log('opcao2')
+        //             })
+        //             .catch((err) => {
+        //                 console.log(err);
+        //             });
+        //     });
 
-        const data = await page.evaluate((imgClassName) => {
+        // if (await page.waitForSelector('.css-1bbjmcj')) {
+        //     imgClassName = '.css-1bbjmcj'
+        //     console.log('opcao1')
+        // } else {
+        //     await page.waitForSelector('.css-7i770w')
+        //     imgClassName = '.css-7i770w'
+        //     console.log('opcao2')
+        // }
+
+        const data = await page.evaluate(() => {
 
             const title = document.querySelector('.css-1mzagbj').textContent
 
@@ -70,7 +86,7 @@ const getFreeGames = async () => {
                 genres.push(elements[j].textContent);
             }
 
-            elements = document.querySelectorAll(imgClassName);
+            elements = document.querySelectorAll('.css-1bbjmcj');
             const srcs = []
             for (let j = 0; j < elements.length; j++) {
                 srcs.push(elements[j].src);
