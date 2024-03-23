@@ -48,31 +48,14 @@ const getFreeGames = async () => {
         await page.waitForSelector('.css-1mzagbj')
         await page.waitForSelector('.css-vs1xw0')
         //await page.waitForSelector('.css-1bbjmcj')
+        
         var imgClassName
-        // page.waitForSelector('.css-1bbjmcj')
-        //     .then(() => {
-        //         imgClassName = '.css-1bbjmcj'
-        //         console.log('opcao1')
-        //     })
-        //     .catch((err) => {
-        //         page.waitForSelector('.css-7i770w')
-        //             .then(() => {
-        //                 imgClassName = '.css-7i770w'
-        //                 console.log('opcao2')
-        //             })
-        //             .catch((err) => {
-        //                 console.log(err);
-        //             });
-        //     });
-
-        if (await page.waitForSelector('.css-1bbjmcj')) {
+        try {
+            await page.waitForSelector('.css-1bbjmcj', {timeout: 1000})
             imgClassName = '.css-1bbjmcj'
-            console.log('opcao1')
-        } else {
-            await page.waitForSelector('.css-7i770w')
+        } catch (error) {
             imgClassName = '.css-7i770w'
-            console.log('opcao2')
-        }
+        } 
 
         const data = await page.evaluate((imgClassName) => {
 
