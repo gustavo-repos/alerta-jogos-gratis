@@ -44,10 +44,17 @@ const getFreeGames = async () => {
         await page.setExtraHTTPHeaders(headerOptions); 
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
 
-        console.log(url)
-        await page.waitForSelector('.css-1bbjmcj')
+        //console.log(url)
         await page.waitForSelector('.css-1mzagbj')
         await page.waitForSelector('.css-vs1xw0')
+        var imgClassName
+        try {
+            await page.waitForSelector('.css-1bbjmcj')
+            imgClassName = '.css-1bbjmcj'
+        } catch (error) {
+            await page.waitForSelector('.css-7i770w')
+            imgClassName = '.css-7i770w'
+        }
 
         const data = await page.evaluate(() => {
 
@@ -61,7 +68,7 @@ const getFreeGames = async () => {
                 genres.push(elements[j].textContent);
             }
 
-            elements = document.querySelectorAll('.css-1bbjmcj');
+            elements = document.querySelectorAll(imgClassName);
             const srcs = []
             for (let j = 0; j < elements.length; j++) {
                 srcs.push(elements[j].src);
