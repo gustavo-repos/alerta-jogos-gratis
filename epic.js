@@ -42,7 +42,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
         const page = await browser.newPage()
         await page.setExtraHTTPHeaders(headerOptions); 
-        page.goto(url, { waitUntil: 'load', timeout: 0 });
+        page.goto(url, { timeout: 0 });
 
         console.log(url)
         await page.waitForSelector('.css-1mzagbj', {timeout: 0})
