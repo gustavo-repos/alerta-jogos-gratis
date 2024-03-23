@@ -20,14 +20,13 @@ const getFreeGames = async () => {
         await page.setExtraHTTPHeaders(headerOptions); 
         await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
-        await page.waitForSelector('.css-g3jcms', {timeout: 0});
+        await page.waitForSelector('.css-g3jcms');
 
         const hrefValues = await page.evaluate(() => {
             const elements = document.querySelectorAll('.css-g3jcms');
             const hrefs = [];
             for (let i = 0; i < elements.length; i++) {
               hrefs.push(elements[i].href);
-              //console.log('parte1:'+elements[i].href)
             }
             return hrefs;
           });
@@ -43,7 +42,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
         const page = await browser.newPage()
         await page.setExtraHTTPHeaders(headerOptions); 
-        page.goto(url, { waitUntil: 'load', timeout: 0 });
+        await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
         console.log(url)
         await page.waitForSelector('.css-1mzagbj', {timeout: 0})
@@ -85,9 +84,9 @@ const getFreeGames = async () => {
         return data
     }
     
-    //var browser = await puppeteer.launch(launchOptions)
     //for (var i = 0; i < links.length; i++) {
-    for (var i = 0; i < 20; i++) {
+    //for (var i = 0; i < 180; i++) {
+    for (var i = 0; i < 10; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
@@ -99,7 +98,6 @@ const getFreeGames = async () => {
           }
           freeGames.push(freeGame)
     }
-    //await browser.close()
     return freeGames;
 }
 
