@@ -1,5 +1,5 @@
 const launchOptions = {
-    userDataDir: './temp',
+    userDataDir: '/home/ubuntu/alerta-jogos-gratis/temp',
     executablePath: '/snap/bin/chromium',
     args: 
     [
