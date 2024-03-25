@@ -41,6 +41,13 @@ const launchOptions = {
         '--prerender-from-omnibox=disabled',
         '--use-gl=swiftshader',
         '--use-mock-keychain',
+        '--aggressive-cache-discard',
+        '--disable-cache',
+        '--disable-application-cache',
+        '--disable-offline-load-stale-cache',
+        '--disable-gpu-shader-disk-cache',
+        '--media-cache-size=0',
+        '--disk-cache-size=0',
         ]
 }
 
