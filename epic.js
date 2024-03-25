@@ -18,8 +18,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
 
         try {
-          const context = await browser.createIncognitoBrowserContext();
-          const page = await context.newPage();
+          const page = await browser.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -36,7 +35,7 @@ const getFreeGames = async () => {
           })
           return hrefValues
         } catch (error) {
-            console.log(e);
+            console.log(error);
         } finally {
             await browser.close()
         }
@@ -49,8 +48,7 @@ const getFreeGames = async () => {
         const browser = await puppeteer.launch(launchOptions)
 
         try {
-          const context = await browser.createIncognitoBrowserContext();
-          const page = await context.newPage();
+          const page = await browser.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -91,7 +89,7 @@ const getFreeGames = async () => {
           })
           return data
         } catch (error) {
-          console.log(e);
+          console.log(error);
         } finally {
           await browser.close()
         }

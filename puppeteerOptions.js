@@ -48,6 +48,7 @@ const launchOptions = {
         '--disable-gpu-shader-disk-cache',
         '--media-cache-size=0',
         '--disk-cache-size=0',
+        '--incognito',
         ]
 }
 
