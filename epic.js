@@ -84,7 +84,7 @@ const getFreeGames = async () => {
         return data
     }
     
-    const browser = await puppeteer.launch(launchOptions)
+    var browser = await puppeteer.launch(launchOptions)
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) {
     for (var i = 0; i < 10; i++) {
