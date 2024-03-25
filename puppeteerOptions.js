@@ -1,5 +1,5 @@
 const launchOptions = {
-    userDataDir: '/temp',
+    userDataDir: './temp',
     executablePath: '/snap/bin/chromium',
     args: 
     [
