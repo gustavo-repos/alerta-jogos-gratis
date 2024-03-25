@@ -1,5 +1,6 @@
 const FreeGame = require('./models/freeGame');
 var fs = require('fs');
+const path = require('path');
 
 const { sendNotification } = require('./notifications')
 
@@ -37,6 +38,10 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
+            fs.readdirSync('/temp').forEach(file => {
+              const filePath = path.join('/temp', file);
+              fs.unlinkSync(filePath);
+            })
             await browser.close()
         }
         
@@ -91,6 +96,10 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
+          fs.readdirSync('/temp').forEach(file => {
+            const filePath = path.join('/temp', file);
+            fs.unlinkSync(filePath);
+          })
           await browser.close()
         }
         
