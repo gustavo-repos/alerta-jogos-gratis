@@ -16,72 +16,82 @@ const getFreeGames = async () => {
 
     async function extractHrefValues(url) {
         const browser = await puppeteer.launch(launchOptions)
-        const page = await browser.newPage()
-        await page.setExtraHTTPHeaders(headerOptions); 
-        await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
-        await page.waitForSelector('.css-g3jcms');
-
-        const hrefValues = await page.evaluate(() => {
-            const elements = document.querySelectorAll('.css-g3jcms');
-            const hrefs = [];
-            for (let i = 0; i < elements.length; i++) {
-              hrefs.push(elements[i].href);
-            }
-            return hrefs;
-          });
-      
-        await browser.close()
-      
-        return hrefValues
+        try {
+          const page = await browser.newPage()
+          await page.setExtraHTTPHeaders(headerOptions); 
+          await page.goto(url, { waitUntil: 'load', timeout: 0 });
+  
+          await page.waitForSelector('.css-g3jcms');
+  
+          const hrefValues = await page.evaluate(() => {
+              const elements = document.querySelectorAll('.css-g3jcms');
+              const hrefs = [];
+              for (let i = 0; i < elements.length; i++) {
+                hrefs.push(elements[i].href);
+              }
+              return hrefs;
+          })
+          return hrefValues
+        } catch (error) {
+            console.log(e);
+        } finally {
+            await browser.close()
+        }
+        
     }
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(url) {
         const browser = await puppeteer.launch(launchOptions)
-        const page = await browser.newPage()
-        await page.setExtraHTTPHeaders(headerOptions); 
-        await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
-        console.log(url)
-        await page.waitForSelector('.css-1mzagbj', {timeout: 30000})
-        await page.waitForSelector('.css-vs1xw0', {timeout: 30000})
-        //await page.waitForSelector('.css-1bbjmcj')
-        
-        var imgClassName
         try {
-            await page.waitForSelector('.css-1bbjmcj', {timeout: 30000})
-            imgClassName = '.css-1bbjmcj'
+          const page = await browser.newPage()
+          await page.setExtraHTTPHeaders(headerOptions); 
+          await page.goto(url, { waitUntil: 'load', timeout: 0 });
+  
+          console.log(url)
+          await page.waitForSelector('.css-1mzagbj', {timeout: 30000})
+          await page.waitForSelector('.css-vs1xw0', {timeout: 30000})
+          //await page.waitForSelector('.css-1bbjmcj')
+          
+          var imgClassName
+          try {
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 30000})
+              imgClassName = '.css-1bbjmcj'
+          } catch (error) {
+              imgClassName = '.css-7i770w'
+          } 
+  
+          const data = await page.evaluate((imgClassName) => {
+  
+              const title = document.querySelector('.css-1mzagbj').textContent
+  
+              var elements
+  
+              elements = document.querySelector('.css-vs1xw0').childNodes
+              const genres = []
+              for (let j = 0; j < elements.length; j++) {
+                  genres.push(elements[j].textContent);
+              }
+  
+              elements = document.querySelectorAll(imgClassName);
+              const srcs = []
+              for (let j = 0; j < elements.length; j++) {
+                  srcs.push(elements[j].src);
+              }
+  
+              return [title, genres.join(' - '), srcs]
+  
+          })
+          return data
         } catch (error) {
-            imgClassName = '.css-7i770w'
-        } 
-
-        const data = await page.evaluate((imgClassName) => {
-
-            const title = document.querySelector('.css-1mzagbj').textContent
-
-            var elements
-
-            elements = document.querySelector('.css-vs1xw0').childNodes
-            const genres = []
-            for (let j = 0; j < elements.length; j++) {
-                genres.push(elements[j].textContent);
-            }
-
-            elements = document.querySelectorAll(imgClassName);
-            const srcs = []
-            for (let j = 0; j < elements.length; j++) {
-                srcs.push(elements[j].src);
-            }
-
-            return [title, genres.join(' - '), srcs]
-
-        })
+          console.log(e);
+        } finally {
+          await browser.close()
+        }
         
-        await browser.close()
-        
-        return data
     }
     
     //var browser = await puppeteer.launch(launchOptions)
