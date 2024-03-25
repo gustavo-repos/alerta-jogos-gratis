@@ -26,7 +26,7 @@ const launchOptions = {
         '--disable-voice-input',
         '--disable-wake-on-wifi',
         '--enable-async-dns',
-        //'--enable-simple-cache-backend',
+        '--enable-simple-cache-backend',
         '--enable-tcp-fast-open',
         '--enable-webgl',
         '--hide-scrollbars',
