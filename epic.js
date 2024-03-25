@@ -38,10 +38,10 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-            fs.readdirSync('./temp').forEach(file => {
-              const filePath = path.join('./temp', file);
-              fs.unlinkSync(filePath);
-            })
+            // fs.readdirSync('./temp').forEach(file => {
+            //   const filePath = path.join('./temp', file);
+            //   fs.unlinkSync(filePath);
+            // })
             await browser.close()
         }
         
@@ -96,10 +96,10 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          fs.readdirSync('./temp').forEach(file => {
-            const filePath = path.join('./temp', file);
-            fs.unlinkSync(filePath);
-          })
+          // fs.readdirSync('./temp').forEach(file => {
+          //   const filePath = path.join('./temp', file);
+          //   fs.unlinkSync(filePath);
+          // })
           await browser.close()
         }
         
