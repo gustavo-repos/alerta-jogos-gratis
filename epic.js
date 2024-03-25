@@ -87,7 +87,7 @@ const getFreeGames = async () => {
     //var browser = await puppeteer.launch(launchOptions)
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
-    const browserOpen = await puppeteer.launch(launchOptions)
+    var browserOpen = await puppeteer.launch(launchOptions)
     for (var i = 0; i < 10; i++) {
         const startTime = new Date().getTime();
         var scrapedData = await scrapData(links[i], browserOpen)        
