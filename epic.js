@@ -19,6 +19,7 @@ const getFreeGames = async () => {
 
         try {
           const page = await browser.newPage()
+          await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
@@ -48,6 +49,7 @@ const getFreeGames = async () => {
 
         try {
           const page = await browser.newPage()
+          await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
