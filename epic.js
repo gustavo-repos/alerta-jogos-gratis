@@ -4,6 +4,7 @@ var fs = require('fs');
 const path = require('path');
 var date
 var startTime
+var endTime
 var log = []
 
 const { sendNotification } = require('./notifications')
@@ -110,7 +111,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 20; i < 25; i++) {
+    for (var i = 0; i < 20; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
@@ -182,7 +183,7 @@ async function sendEpicGames() {
               .then(result => {
                 //fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
                 log.push(`Removido o jogo ${result.title} (${result.site}).`)
-                console.log(`Removido o jogo ${result.title} (${result.site}).`)
+                //console.log(`Removido o jogo ${result.title} (${result.site}).`)
               })
               .catch(err => {
                 console.log(err)

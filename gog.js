@@ -1,7 +1,12 @@
 const FreeGame = require('./models/freeGame');
+const UpdateLog = require('./models/updateLog');
 const { gameData } = require('./freeGameTest')
 var fs = require('fs');
 const { makeRequest, getData } = require('./scraper')
+var date
+var startTime
+var endTime
+var log = []
 
 const { sendNotification } = require('./notifications')
 
@@ -9,6 +14,11 @@ const { sendNotification } = require('./notifications')
 // var newGames = [];
 
 const getFreeGames = async () => {
+
+    date = new Date()
+    startTime = date.getTime()
+
+    log.push(`Início da atualização da Gog ${date.toLocaleDateString("en-GB")} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
     var freeGames = [];
 
@@ -45,16 +55,18 @@ const getFreeGames = async () => {
           //console.log(gamePage.getElementsByClassName('details__content table__row-content')[0].textContent.replace(/\s+/g, ' '))
           freeGames.push(freeGame)
     }
-
+    date = new Date()
+    endTime = date.getTime()
+    log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
     return freeGames;
 
 }
 
 async function sendGogGames() {
 
-  var date = new Date();  
+  //var date = new Date();  
 
-  fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
+  //fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
 
   var freeGames = await getFreeGames();
 
@@ -87,13 +99,15 @@ async function sendGogGames() {
 
   if (newGames.length > 0) {
     for (var i = 0; i < newGames.length; i++) {
-      fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+      //fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+      log.push(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
       sendNotification(`O jogo ${newGames[i].title} foi adicionado na plataforma ${newGames[i].site}!`)
-      console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
+      //console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
     }
   } else {
-    fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Gog.\n`)
-    console.log("Nenhum jogo novo adicionado na Gog.")
+    log.push(`Nenhum jogo novo adicionado na Gog.`)
+    //fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Gog.\n`)
+    //console.log("Nenhum jogo novo adicionado na Gog.")
   }
 
 
@@ -109,8 +123,9 @@ async function sendGogGames() {
         if (gameWasRemoved) {
           await FreeGame.findOneAndDelete({ "title": result[i].title, "site": result[i].site })
             .then(result => {
-              fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
-              console.log(`Removido o jogo ${result.title} (${result.site}).`)
+              log.push(`Removido o jogo ${result.title} (${result.site}).`)
+              // fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
+              // console.log(`Removido o jogo ${result.title} (${result.site}).`)
             })
             .catch(err => {
               console.log(err)
@@ -122,7 +137,8 @@ async function sendGogGames() {
       console.log(err)
     });
 
-  fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
+  log.push(`Fim da atualização da Gog.`)
+  //fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
 
 }
 

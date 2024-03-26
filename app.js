@@ -67,7 +67,7 @@ app.get('/log', (req, res) => {
 
 app.get('/scan', (req, res) => {
     Promise.all([
-        //sendGogGames(), 
+        sendGogGames(), 
         sendEpicGames()
     ])
         //sendEpicGames()
