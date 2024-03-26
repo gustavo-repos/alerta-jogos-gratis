@@ -63,14 +63,11 @@ const getFreeGames = async () => {
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
-          //console.log(url)
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
           try {
-              console.log('1')
               await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
           } catch (error) {
-              console.log('2')
               await page.waitForSelector('.css-7i770w', {timeout: 0})
           } 
   
@@ -113,7 +110,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 50; i < 60; i++) {
+    for (var i = 20; i < 25; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
@@ -126,7 +123,7 @@ const getFreeGames = async () => {
           freeGames.push(freeGame)
     }
     date = new Date()
-    endTime = data.getTime()
+    endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s`)
     return freeGames;
 }
