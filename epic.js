@@ -1,6 +1,10 @@
-const FreeGame = require('./models/freeGame');
+const FreeGame = require('./models/freeGame')
+const UpdateLog = require('./models/updateLog');
 var fs = require('fs');
 const path = require('path');
+var date
+var startTime
+var log = []
 
 const { sendNotification } = require('./notifications')
 
@@ -12,6 +16,11 @@ const { launchOptions, headerOptions } = require('./puppeteerOptions')
 const puppeteer = require('puppeteer-core')
 
 const getFreeGames = async () => {
+
+    date = new Date()
+    startTime = date.getTime()
+
+    log.push(`Início da atualização da Epic ${date.toLocaleDateString()} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
     var freeGames = [];
 
@@ -38,10 +47,6 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-            // fs.readdirSync('./temp').forEach(file => {
-            //   const filePath = path.join('./temp', file);
-            //   fs.unlinkSync(filePath);
-            // })
             await browser.close()
         }
         
@@ -58,13 +63,9 @@ const getFreeGames = async () => {
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
-          console.log(url)
+          //console.log(url)
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
-          // await page.waitForSelector('.css-1bbjmcj', {timeout: 0})
-          // await page.waitForSelector('.css-7i770w', {timeout: 0})
-          
-          // var imgClassName
           try {
               console.log('1')
               await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
@@ -74,15 +75,6 @@ const getFreeGames = async () => {
           } 
   
           const data = await page.evaluate(() => {
-              // console.log('3: ')
-              // console.log(imgClassName)
-
-              // try {
-              //   console.log('3: ')
-              //   console.log(imgClassName)
-              // } catch (error) {
-              //   console.log(error)
-              // }
 
               const title = document.querySelector('.css-1mzagbj').textContent
   
@@ -94,13 +86,6 @@ const getFreeGames = async () => {
                   genres.push(elements[j].textContent);
               }
   
-              // try {
-              //   elements = document.querySelectorAll('.css-1bbjmcj');
-              //   console.log('opcao 1')
-              // } catch (error) {
-              //   elements = document.querySelectorAll('.css-7i770w');
-              //   console.log('opcao 2')
-              // }
               if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
                 elements = document.querySelectorAll('.css-1bbjmcj')
               } else {
@@ -118,10 +103,6 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          // fs.readdirSync('./temp').forEach(file => {
-          //   const filePath = path.join('./temp', file);
-          //   fs.unlinkSync(filePath);
-          // })
           await browser.close()
         }
         
@@ -132,8 +113,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 10; i < 20; i++) {
-        const startTime = new Date().getTime();
+    for (var i = 50; i < 60; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
@@ -144,24 +124,19 @@ const getFreeGames = async () => {
             images: scrapedData[2],
           }
           freeGames.push(freeGame)
-          const endTime = new Date().getTime();
-          const timeTaken = endTime - startTime;
-          console.log("Function took " + timeTaken + " milliseconds");
     }
-    //await browser.close()
-    //await browserOpen.close()
+    date = new Date()
+    endTime = data.getTime()
+    log.push(`O scrap durou ${(endTime - startTime)/1000}s`)
     return freeGames;
 }
 
 async function sendEpicGames() {
 
-
     // var test = await getFreeGames()
     // console.log(test) 
 
-    var date = new Date()
-
-    fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
+    //fs.appendFileSync('./log.txt', `ATUALIZAÇÃO ${date.toLocaleDateString()} ${parseInt(date.getHours()) - 3}:${date.getMinutes()}\n`)
 
     var freeGames = await getFreeGames()
 
@@ -184,12 +159,14 @@ async function sendEpicGames() {
 
     if (newGames.length > 0) {
         for (var i = 0; i < newGames.length; i++) {
-          fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+          //fs.appendFileSync('./log.txt', `Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).\n`)
+          log.push(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
           sendNotification(`O jogo ${newGames[i].title} foi adicionado na plataforma ${newGames[i].site}!`)
           console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
         }
       } else {
         fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Epic.\n`)
+        log.push(`Nenhum jogo novo adicionado na Epic.`)
         console.log("Nenhum jogo novo adicionado na Epic.")
       }
 
@@ -206,7 +183,8 @@ async function sendEpicGames() {
           if (gameWasRemoved) {
             await FreeGame.findOneAndDelete({ "title": result[i].title, "site": result[i].site })
               .then(result => {
-                fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
+                //fs.appendFileSync('./log.txt', `Removido o jogo ${result.title} (${result.site}).\n`)
+                log.push(`Removido o jogo ${result.title} (${result.site}).`)
                 console.log(`Removido o jogo ${result.title} (${result.site}).`)
               })
               .catch(err => {
@@ -219,7 +197,10 @@ async function sendEpicGames() {
         console.log(err)
       });
   
-    fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
+    log.push(`Fim da atualização.`)
+    //fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
+
+    await new UpdateLog(log).save()
 
 }
 
