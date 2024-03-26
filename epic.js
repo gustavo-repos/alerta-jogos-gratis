@@ -109,21 +109,27 @@ const getFreeGames = async () => {
     //console.log('Tamanho de link: '+links.length)
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 48; i < 58; i++) {
-    //for (var i = 0; i < links.length; i++) {
-        var scrapedData = await scrapData(links[i], browserOpen)        
 
-        var freeGame = {
-            title: scrapedData[0], 
-            site: "Epic", 
-            link: links[i],
-            genre: scrapedData[1],
-            images: scrapedData[2],
-          }
-          freeGames.push(freeGame)
+    try {
+      var browserOpen = await puppeteer.launch(launchOptions)
+      for (var i = 48; i < 58; i++) {
+          var scrapedData = await scrapData(links[i], browserOpen)        
+  
+          var freeGame = {
+              title: scrapedData[0], 
+              site: "Epic", 
+              link: links[i],
+              genre: scrapedData[1],
+              images: scrapedData[2],
+            }
+            freeGames.push(freeGame)
+      }
+    } catch (error) {
+      console.log(error); 
+    } finally {
+      await browserOpen.close()
     }
-    await browserOpen.close()
+
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
