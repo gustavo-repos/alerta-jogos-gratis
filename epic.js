@@ -67,14 +67,14 @@ const getFreeGames = async () => {
           try {
               await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
               imgClassName = '.css-1bbjmcj'
-              console.log(imgClassName)
+              console.log('1: '+imgClassName)
           } catch (error) {
               imgClassName = '.css-7i770w'
-              console.log(imgClassName)
+              console.log('2: '+imgClassName)
           } 
   
           const data = await page.evaluate((imgClassName) => {
-            console.log(imgClassName)
+            console.log('3: '+imgClassName)
               const title = document.querySelector('.css-1mzagbj').textContent
   
               var elements
@@ -93,7 +93,7 @@ const getFreeGames = async () => {
   
               return [title, genres.join(' - '), srcs]
   
-          })
+          }, imgClassName)
           return data
         } catch (error) {
           console.log(error);
@@ -112,7 +112,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 0; i < 10; i++) {
+    for (var i = 10; i < 20; i++) {
         const startTime = new Date().getTime();
         var scrapedData = await scrapData(links[i])        
 
