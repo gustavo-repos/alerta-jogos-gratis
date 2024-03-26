@@ -58,8 +58,8 @@ app.get('/log', (req, res) => {
 });
 
 app.get('/scan', (req, res) => {
-    //Promise.all([sendGogGames(), sendEpicGames()])
-        sendEpicGames()
+    Promise.all([sendGogGames(), sendEpicGames()])
+        //sendEpicGames()
         .then(() => {
             res.redirect('/')
         })
