@@ -4,11 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const FreeGame = require('./models/freeGame');
 const UpdateLog = require('./models/updateLog');
-var fs = require('fs');
 const UserToken = require('./models/userPushToken');
 
 const { sendNotification } = require('./notifications')
-const { getFreeGames } = require('./epic')
 const { getFirstInterval } = require('./time')
 
 const { sendEpicGames } = require('./epic')
@@ -70,7 +68,6 @@ app.get('/scan', (req, res) => {
         sendGogGames(), 
         sendEpicGames()
     ])
-        //sendEpicGames()
         .then(() => {
             res.redirect('/')
         })
@@ -89,18 +86,6 @@ app.get('/message', (req, res) => {
         });
 })
 
-// app.post('/pushtokens', (req, res) => {
-//     const token = new UserToken(req.body);
-//     console.log(req.body)
-//     token.save()
-//       .then(() => {
-//           console.log('token salvo')
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
-// })
-
 app.post('/pushtokens', (req, res) => {
     UserToken.init()
         .then( async ()=>{
@@ -118,7 +103,7 @@ var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
 
 var timing = function(){
     var timer = setInterval(function() {
-        console.log('=== ATUALIZANDO ===')
+        //console.log('=== ATUALIZANDO ===')
         sendGogGames()
         sendEpicGames()
         interval = 43200000; // 86400000 = 1 dia em milisegundos , fazer pela metade (43200000) 8 da manha e 8 da noite
