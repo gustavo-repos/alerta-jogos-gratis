@@ -164,7 +164,7 @@ async function sendEpicGames() {
       } else {
         //fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Epic.\n`)
         log.push(`Nenhum jogo novo adicionado na Epic.`)
-        console.log("Nenhum jogo novo adicionado na Epic.")
+        //console.log("Nenhum jogo novo adicionado na Epic.")
       }
 
 

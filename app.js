@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const FreeGame = require('./models/freeGame');
+const UpdateLog = require('./models/updateLog');
 var fs = require('fs');
 const UserToken = require('./models/userPushToken');
 
@@ -53,8 +54,15 @@ app.get('/games', (req, res) => {
 });
 
 app.get('/log', (req, res) => {
-    var log = fs.readFileSync('./log.txt').toString()
-    res.json({ log });
+    //var log = fs.readFileSync('./log.txt').toString()
+    UpdateLog.find()
+        .then(result => {
+            res.json({ log: result })
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    //res.json({ log });
 });
 
 app.get('/scan', (req, res) => {
