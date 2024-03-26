@@ -66,10 +66,10 @@ const getFreeGames = async () => {
           
           // var imgClassName
           try {
-              console.log('1: '+imgClassName)
+              console.log('1')
               await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
           } catch (error) {
-              console.log('2: '+imgClassName)
+              console.log('2')
               await page.waitForSelector('.css-7i770w', {timeout: 0})
           } 
   
