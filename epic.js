@@ -102,7 +102,7 @@ const getFreeGames = async () => {
   
               return [title, genres.join(' - '), srcs]
   
-          }, imgClassName)
+          })
           return data
         } catch (error) {
           console.log(error);

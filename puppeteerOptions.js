@@ -50,7 +50,6 @@ const launchOptions = {
         '--media-cache-size=0',
         '--disk-cache-size=0',
         '--incognito',
-
         '--headless',
         ]
 }
