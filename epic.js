@@ -101,7 +101,7 @@ const getFreeGames = async () => {
               //   elements = document.querySelectorAll('.css-7i770w');
               //   console.log('opcao 2')
               // }
-              if (document.querySelectorAll('.css-1bbjmcj') > 0) {
+              if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
                 elements = document.querySelectorAll('.css-1bbjmcj')
               } else {
                 elements = document.querySelectorAll('.css-7i770w')
