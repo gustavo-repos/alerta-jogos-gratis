@@ -73,8 +73,17 @@ const getFreeGames = async () => {
               console.log('2: '+imgClassName)
           } 
   
-          const data = await page.evaluate(() => {
-              console.log('3: '+imgClassName)
+          const data = await page.evaluate((imgClassName) => {
+              // console.log('3: ')
+              // console.log(imgClassName)
+
+              try {
+                console.log('3: ')
+                console.log(imgClassName)
+              } catch (error) {
+                console.log(error)
+              }
+
               const title = document.querySelector('.css-1mzagbj').textContent
   
               var elements
