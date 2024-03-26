@@ -25,7 +25,7 @@ const getFreeGames = async () => {
 
     async function extractHrefValues(url) {
         const browser = await puppeteer.launch(launchOptions)
-        console.log(url)
+
         try {
           const page = await browser.newPage()
           await page.setCacheEnabled(false)
@@ -55,7 +55,7 @@ const getFreeGames = async () => {
 
     async function scrapData(url) {
         const browser = await puppeteer.launch(launchOptions)
-
+        console.log(url)
         try {
           const page = await browser.newPage()
           await page.setCacheEnabled(false)
