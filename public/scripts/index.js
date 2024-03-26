@@ -24,10 +24,10 @@ const displayLog = () => {
     //console.log(log)
     //textArea.innerHTML = log.log
 
-    for (var i = 0; i < log.length; i++) {
+    for (var i = 0; i < content.length; i++) {
 
-        for (var j = 0; j < log[i].log.length; j++) {
-            textArea.appendChild(log[i].log[j]);
+        for (var j = 0; j < content[i].log.length; j++) {
+            textArea.innerHTML= `${content[i].log[j]}`;
         }
 
     }
@@ -68,7 +68,7 @@ async function fetchLog() {
     .then(response => {
         response.json()
             .then(data => {
-                log = data.log;
+                content = data.log;
                 displayLog();
             })
     })
