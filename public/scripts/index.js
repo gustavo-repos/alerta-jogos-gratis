@@ -21,8 +21,8 @@ const displayGames = () => {
 
 const displayLog = () => {
 
-    //console.log(log)
-    textArea.innerHTML = log
+    console.log(log)
+    textArea.innerHTML = log.log
     textArea.scrollTop = textArea.scrollHeight;
     
     
