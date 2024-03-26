@@ -53,8 +53,8 @@ const getFreeGames = async () => {
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
-    async function scrapData(url) {
-        const browser = await puppeteer.launch(launchOptions)
+    async function scrapData(url, browser) {
+        //const browser = await puppeteer.launch(launchOptions)
         console.log(url)
         try {
           const page = await browser.newPage()
@@ -99,7 +99,8 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          await browser.close()
+          //await browser.close()
+          console.log('fim do scrap')
         }
         
     }
@@ -108,9 +109,10 @@ const getFreeGames = async () => {
     //console.log('Tamanho de link: '+links.length)
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
+    var browserOpen = await puppeteer.launch(launchOptions)
     for (var i = 48; i < 58; i++) {
     //for (var i = 0; i < links.length; i++) {
-        var scrapedData = await scrapData(links[i])        
+        var scrapedData = await scrapData(links[i], browserOpen)        
 
         var freeGame = {
             title: scrapedData[0], 
@@ -121,6 +123,7 @@ const getFreeGames = async () => {
           }
           freeGames.push(freeGame)
     }
+    await browserOpen.close()
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
