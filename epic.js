@@ -108,8 +108,8 @@ const getFreeGames = async () => {
     //console.log('Tamanho de link: '+links.length)
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    //for (var i = 0; i < 20; i++) {
-    for (var i = 0; i < links.length; i++) {
+    for (var i = 48; i < 58; i++) {
+    //for (var i = 0; i < links.length; i++) {
         var scrapedData = await scrapData(links[i])        
 
         var freeGame = {
