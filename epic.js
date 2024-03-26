@@ -73,8 +73,8 @@ const getFreeGames = async () => {
               console.log('2: '+imgClassName)
           } 
   
-          const data = await page.evaluate((imgClassName) => {
-            console.log('3: '+imgClassName)
+          const data = await page.evaluate(() => {
+              console.log('3: '+imgClassName)
               const title = document.querySelector('.css-1mzagbj').textContent
   
               var elements
@@ -112,7 +112,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 10; i < 20; i++) {
+    for (var i = 20; i < 30; i++) {
         const startTime = new Date().getTime();
         var scrapedData = await scrapData(links[i])        
 
