@@ -124,7 +124,7 @@ const getFreeGames = async () => {
     }
     date = new Date()
     endTime = date.getTime()
-    log.push(`O scrap durou ${(endTime - startTime)/1000}s`)
+    log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
     return freeGames;
 }
 
@@ -162,7 +162,7 @@ async function sendEpicGames() {
           console.log(`Adicionado o jogo ${newGames[i].title} (${newGames[i].site}).`)
         }
       } else {
-        fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Epic.\n`)
+        //fs.appendFileSync('./log.txt', `Nenhum jogo novo adicionado na Epic.\n`)
         log.push(`Nenhum jogo novo adicionado na Epic.`)
         console.log("Nenhum jogo novo adicionado na Epic.")
       }
@@ -197,6 +197,7 @@ async function sendEpicGames() {
     log.push(`Fim da atualização.`)
     //fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
 
+    console.log(log)
     await new UpdateLog(log).save()
 
 }
