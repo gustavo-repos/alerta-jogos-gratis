@@ -11,7 +11,7 @@ function makeRequest(url) {
       });
 
       res.on('end', () => {
-        console.log('Dados recebidos:', data); // Adicione este log para depuração
+        //console.log('Dados recebidos:', data); // Adicione este log para depuração
         const { window } = new JSDOM(data);
         resolve(window.document);
       });
