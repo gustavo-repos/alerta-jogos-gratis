@@ -120,6 +120,7 @@ const getFreeGames = async () => {
             images: scrapedData[2],
           }
           freeGames.push(freeGame)
+
     }
     date = new Date()
     endTime = date.getTime()
