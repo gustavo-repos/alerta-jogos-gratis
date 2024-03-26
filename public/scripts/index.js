@@ -33,7 +33,7 @@ const displayLog = () => {
             ${log[i].log}
         `
 
-            textArea.appendChild(listItem);
+            textArea.appendChild(logItem);
 
     }
 
