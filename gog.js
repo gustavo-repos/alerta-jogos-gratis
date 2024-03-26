@@ -139,7 +139,8 @@ async function sendGogGames() {
 
   log.push(`Fim da atualização da Gog.`)
   //fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
-
+  console.log(log)
+  await new UpdateLog({log}).save()
 }
 
 
