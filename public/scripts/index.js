@@ -27,7 +27,7 @@ const displayLog = () => {
     for (var i = 0; i < content.length; i++) {
 
         for (var j = 0; j < content[i].log.length; j++) {
-            textArea.innerHTML+= `<span>${content[i].log[j]}</span>`;
+            textArea.innerHTML+= `${content[i].log[j]}\n`;
         }
 
     }
