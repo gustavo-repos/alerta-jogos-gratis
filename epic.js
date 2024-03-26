@@ -53,8 +53,8 @@ const getFreeGames = async () => {
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
-    async function scrapData(url, browser) {
-        //const browser = await puppeteer.launch(launchOptions)
+    async function scrapData(url) {
+        const browser = await puppeteer.launch(launchOptions)
         console.log(url)
         try {
           const page = await browser.newPage()
@@ -99,8 +99,7 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          //await browser.close()
-          console.log('fim do scrap')
+          await browser.close()
         }
         
     }
@@ -109,27 +108,19 @@ const getFreeGames = async () => {
     //console.log('Tamanho de link: '+links.length)
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
+    for (var i = 48; i < 58; i++) {
+    //for (var i = 0; i < links.length; i++) {
+        var scrapedData = await scrapData(links[i])        
 
-    try {
-      var browserOpen = await puppeteer.launch(launchOptions)
-      for (var i = 48; i < 58; i++) {
-          var scrapedData = await scrapData(links[i], browserOpen)        
-  
-          var freeGame = {
-              title: scrapedData[0], 
-              site: "Epic", 
-              link: links[i],
-              genre: scrapedData[1],
-              images: scrapedData[2],
-            }
-            freeGames.push(freeGame)
-      }
-    } catch (error) {
-      console.log(error); 
-    } finally {
-      await browserOpen.close()
+        var freeGame = {
+            title: scrapedData[0], 
+            site: "Epic", 
+            link: links[i],
+            genre: scrapedData[1],
+            images: scrapedData[2],
+          }
+          freeGames.push(freeGame)
     }
-
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)

@@ -51,6 +51,7 @@ const launchOptions = {
         '--disk-cache-size=0',
         '--incognito',
         '--headless',
+        '--disable-gpu',
         ]
 }
 
