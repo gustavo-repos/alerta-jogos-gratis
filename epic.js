@@ -20,7 +20,7 @@ const getFreeGames = async () => {
     date = new Date()
     startTime = date.getTime()
 
-    log.push(`Início da atualização da Epic ${date.toLocaleDateString()} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
+    log.push(`Início da atualização da Epic ${date.toLocaleDateString("en-GB")} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
     var freeGames = [];
 
@@ -194,7 +194,7 @@ async function sendEpicGames() {
         console.log(err)
       });
   
-    log.push(`Fim da atualização.`)
+    log.push(`Fim da atualização da Epic.`)
     //fs.appendFileSync('./log.txt', `Fim da atualização\n\n`)
 
     console.log(log)
