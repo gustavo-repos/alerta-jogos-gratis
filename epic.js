@@ -61,18 +61,17 @@ const getFreeGames = async () => {
           console.log(url)
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
-          await page.waitForSelector('.css-1bbjmcj', {timeout: 0})
-          await page.waitForSelector('.css-7i770w', {timeout: 0})
+          // await page.waitForSelector('.css-1bbjmcj', {timeout: 0})
+          // await page.waitForSelector('.css-7i770w', {timeout: 0})
           
           // var imgClassName
-          // try {
-          //     await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
-          //     imgClassName = '.css-1bbjmcj'
-          //     console.log('1: '+imgClassName)
-          // } catch (error) {
-          //     imgClassName = '.css-7i770w'
-          //     console.log('2: '+imgClassName)
-          // } 
+          try {
+              console.log('1: '+imgClassName)
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+          } catch (error) {
+              console.log('2: '+imgClassName)
+              await page.waitForSelector('.css-7i770w', {timeout: 0})
+          } 
   
           const data = await page.evaluate(() => {
               // console.log('3: ')
@@ -95,12 +94,17 @@ const getFreeGames = async () => {
                   genres.push(elements[j].textContent);
               }
   
-              try {
-                elements = document.querySelectorAll('.css-1bbjmcj');
-                console.log('opcao 1')
-              } catch (error) {
-                elements = document.querySelectorAll('.css-7i770w');
-                console.log('opcao 2')
+              // try {
+              //   elements = document.querySelectorAll('.css-1bbjmcj');
+              //   console.log('opcao 1')
+              // } catch (error) {
+              //   elements = document.querySelectorAll('.css-7i770w');
+              //   console.log('opcao 2')
+              // }
+              if (document.querySelectorAll('.css-1bbjmcj') > 0) {
+                elements = document.querySelectorAll('.css-1bbjmcj')
+              } else {
+                elements = document.querySelectorAll('.css-7i770w')
               }
               const srcs = []
               for (let j = 0; j < elements.length; j++) {
