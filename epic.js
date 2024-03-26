@@ -61,28 +61,29 @@ const getFreeGames = async () => {
           console.log(url)
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
-          //await page.waitForSelector('.css-1bbjmcj')
+          await page.waitForSelector('.css-1bbjmcj', {timeout: 0})
+          await page.waitForSelector('.css-7i770w', {timeout: 0})
           
-          var imgClassName
-          try {
-              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
-              imgClassName = '.css-1bbjmcj'
-              console.log('1: '+imgClassName)
-          } catch (error) {
-              imgClassName = '.css-7i770w'
-              console.log('2: '+imgClassName)
-          } 
+          // var imgClassName
+          // try {
+          //     await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+          //     imgClassName = '.css-1bbjmcj'
+          //     console.log('1: '+imgClassName)
+          // } catch (error) {
+          //     imgClassName = '.css-7i770w'
+          //     console.log('2: '+imgClassName)
+          // } 
   
-          const data = await page.evaluate((imgClassName) => {
+          const data = await page.evaluate(() => {
               // console.log('3: ')
               // console.log(imgClassName)
 
-              try {
-                console.log('3: ')
-                console.log(imgClassName)
-              } catch (error) {
-                console.log(error)
-              }
+              // try {
+              //   console.log('3: ')
+              //   console.log(imgClassName)
+              // } catch (error) {
+              //   console.log(error)
+              // }
 
               const title = document.querySelector('.css-1mzagbj').textContent
   
@@ -94,7 +95,13 @@ const getFreeGames = async () => {
                   genres.push(elements[j].textContent);
               }
   
-              elements = document.querySelectorAll(imgClassName);
+              try {
+                elements = document.querySelectorAll('.css-1bbjmcj');
+                console.log('opcao 1')
+              } catch (error) {
+                elements = document.querySelectorAll('.css-7i770w');
+                console.log('opcao 2')
+              }
               const srcs = []
               for (let j = 0; j < elements.length; j++) {
                   srcs.push(elements[j].src);
@@ -121,7 +128,7 @@ const getFreeGames = async () => {
     //for (var i = 0; i < links.length; i++) {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
-    for (var i = 20; i < 30; i++) {
+    for (var i = 0; i < 10; i++) {
         const startTime = new Date().getTime();
         var scrapedData = await scrapData(links[i])        
 
