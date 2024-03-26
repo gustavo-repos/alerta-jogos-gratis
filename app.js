@@ -105,19 +105,6 @@ app.post('/pushtokens', (req, res) => {
         });
 })
 
-// const token = new UserToken({
-//     userId: 'idTeste', 
-//     token: 'ExponentPushToken[w8wiJrAdfoMEosnr6WWyw0]'
-// })
-//     token.save()
-//         .then(() => {
-//             console.log('token salvo')
-//         })
-//         .catch(err => {
-//             //res.json({ err: err.message });
-//             console.log(err);
-// });
-
 
 var interval = (getFirstInterval(20 + 3, 0) * 1000); // +3 para aws, na hora
 
