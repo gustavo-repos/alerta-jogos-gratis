@@ -29,7 +29,7 @@ const displayLog = () => {
         for (var j = 0; j < content[i].log.length; j++) {
             textArea.innerHTML+= `${content[i].log[j]}\n`;
         }
-
+        textArea.innerHTML+= `\n`
     }
 
     textArea.scrollTop = textArea.scrollHeight;
