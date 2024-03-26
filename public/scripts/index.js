@@ -26,14 +26,9 @@ const displayLog = () => {
 
     for (var i = 0; i < log.length; i++) {
 
-        var logItem = document.createElement('span');
-        
-
-        logItem.innerHTML = `
-            ${log[i].log}
-        `
-
-            textArea.appendChild(logItem);
+        for (var j = 0; j < log[i].log.length; j++) {
+            textArea.appendChild(log[i].log[j]);
+        }
 
     }
 
