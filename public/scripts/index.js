@@ -15,14 +15,28 @@ const displayGames = () => {
 
         list.appendChild(listItem);
 
-    };
+    }
 
 }
 
 const displayLog = () => {
 
-    console.log(log)
-    textArea.innerHTML = log.log
+    //console.log(log)
+    //textArea.innerHTML = log.log
+
+    for (var i = 0; i < log.length; i++) {
+
+        var logItem = document.createElement('span');
+        
+
+        logItem.innerHTML = `
+            ${log[i].log}
+        `
+
+            textArea.appendChild(listItem);
+
+    }
+
     textArea.scrollTop = textArea.scrollHeight;
     
     
