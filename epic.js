@@ -109,19 +109,19 @@ const getFreeGames = async () => {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
     //for (var i = 48; i < 58; i++) {
-    for (var i = 0; i < links.length; i++) {
-        var scrapedData = await scrapData(links[i])        
-
+      links.forEach(async (link) => {
+        var scrapedData = await scrapData(link);
+    
         var freeGame = {
-            title: scrapedData[0], 
-            site: "Epic", 
-            link: links[i],
+            title: scrapedData[0],
+            site: "Epic",
+            link: link,
             genre: scrapedData[1],
             images: scrapedData[2],
-          }
-          freeGames.push(freeGame)
-
-    }
+        };
+        freeGames.push(freeGame);
+    });
+    
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
