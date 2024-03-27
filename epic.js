@@ -24,10 +24,10 @@ const getFreeGames = async () => {
     var freeGames = [];
 
     async function extractHrefValues(url) {
-        const browser = await puppeteer.launch(launchOptions)
+        const firstBrowser = await puppeteer.launch(launchOptions)
 
         try {
-          const page = await browser.newPage()
+          const page = await firstBrowser.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -46,18 +46,22 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-            await browser.close()
+            await firstBrowser.close()
         }
         
     }
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
+
+    let secondBrowser
     async function scrapData(url) {
-        //const browser = await puppeteer.launch(launchOptions)
+        if (!secondBrowser) {
+          secondBrowser = await puppeteer.launch(launchOptions)
+        }
         console.log(url)
         try {
-          const page = await browser.newPage()
+          const page = await secondBrowser.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -99,8 +103,7 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          await page.close()
-          //await browser.close()
+          if (secondBrowser) await secondBrowser.close()
         }
         
     }
@@ -114,7 +117,6 @@ const getFreeGames = async () => {
     //var scrapedData
     var freeGame
 
-    const browser = await puppeteer.launch(launchOptions)
     for (var i = 0; i < links.length; i++) {
       await scrapData(links[i])        
         .then((result) => {
@@ -128,7 +130,7 @@ const getFreeGames = async () => {
           freeGames.push(freeGame)
         })
     }
-    await browser.close()
+
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
