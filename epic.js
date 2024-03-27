@@ -112,34 +112,29 @@ const getFreeGames = async () => {
 
     //var scrapedData
     var freeGame
+    var counter = 0
 
-    links.forEach(link => {
-      scrapData(link)        
-        .then((result) => {
-          freeGame = {
-            title: result[0], 
-            site: "Epic", 
-            link: links[i],
-            genre: result[1],
-            images: result[2],
-          }
-        freeGames.push(freeGame)
-      })
-    });
+    for (var i = 0; i < links.length; i++) {
 
-    // for (var i = 166; i < 177; i++) {
-    //     await scrapData(links[i])        
-    //       .then((result) => {
-    //         freeGame = {
-    //           title: result[0], 
-    //           site: "Epic", 
-    //           link: links[i],
-    //           genre: result[1],
-    //           images: result[2],
-    //         }
-    //         freeGames.push(freeGame)
-    //       })
-    // }
+      if (counter === 30) {
+          await new Promise(resolve => setTimeout(resolve, 2000)); 
+          counter = 0; 
+      }
+
+        await scrapData(links[i])        
+          .then((result) => {
+            freeGame = {
+              title: result[0], 
+              site: "Epic", 
+              link: links[i],
+              genre: result[1],
+              images: result[2],
+            }
+            freeGames.push(freeGame)
+          })
+
+        counter++;
+    }
 
     date = new Date()
     endTime = date.getTime()
