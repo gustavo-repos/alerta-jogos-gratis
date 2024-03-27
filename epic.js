@@ -54,7 +54,7 @@ const getFreeGames = async () => {
     async function scrapData(urls) {
 
         var freeGames = []
-        var freeGame = {}
+
 
         const browser = await puppeteer.launch(launchOptions)
         
@@ -76,6 +76,8 @@ const getFreeGames = async () => {
             } 
     
             const data = await page.evaluate(() => {
+
+                var freeGame
 
                 const title = document.querySelector('.css-1mzagbj').textContent
     
