@@ -52,7 +52,7 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(urls) {
-      var freeGames = [];
+      const freeGames = [];
   
       let browser;
       try {
@@ -62,7 +62,7 @@ const getFreeGames = async () => {
           await page.setExtraHTTPHeaders(headerOptions);
           page.setDefaultNavigationTimeout(0);
   
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < urls.length; i++) {
               console.log(urls[i]);
               await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
               await page.waitForSelector('.css-1mzagbj', { timeout: 0 });
@@ -102,6 +102,8 @@ const getFreeGames = async () => {
               });
   
               freeGames.push(data);
+              // Aguarda um pequeno intervalo antes de prosseguir para a próxima iteração
+              await new Promise(resolve => setTimeout(resolve, 1000));
           }
       } catch (error) {
           console.log(error);
