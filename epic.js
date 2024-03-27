@@ -52,88 +52,68 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(urls) {
-
-        var freeGames = []
-
-
-        const browser = await puppeteer.launch(launchOptions)
-        const page = await browser.newPage()
-        await page.setCacheEnabled(false)
-        await page.setExtraHTTPHeaders(headerOptions)
-        page.setDefaultNavigationTimeout(0)
-        
+      var freeGames = [];
+  
+      let browser;
       try {
-        for (var i = 0; i < 10; i++) {
-
-          console.log(urls[i])
-
-
-          await page.goto(urls[i], { waitUntil: 'load', timeout: 5000 });
+          browser = await puppeteer.launch(launchOptions);
+          const page = await browser.newPage();
+          await page.setCacheEnabled(false);
+          await page.setExtraHTTPHeaders(headerOptions);
+          page.setDefaultNavigationTimeout(0);
   
-          await page.waitForSelector('.css-1mzagbj', {timeout: 5000})
-          await page.waitForSelector('.css-vs1xw0', {timeout: 5000})
-          try {
-              await page.waitForSelector('.css-1bbjmcj', {timeout: 5000}) 
-          } catch (error) {
-              await page.waitForSelector('.css-7i770w', {timeout: 5000})
-          } 
-  
-          const data = await page.evaluate(() => {
-
-              var freeGame
-
-              const title = document.querySelector('.css-1mzagbj').textContent
-  
-              var elements
-  
-              elements = document.querySelector('.css-vs1xw0').childNodes
-              const genres = []
-              for (let j = 0; j < elements.length; j++) {
-                  genres.push(elements[j].textContent);
+          for (let i = 0; i < 10; i++) {
+              console.log(urls[i]);
+              await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
+              await page.waitForSelector('.css-1mzagbj', { timeout: 0 });
+              await page.waitForSelector('.css-vs1xw0', { timeout: 0 });
+              try {
+                  await page.waitForSelector('.css-1bbjmcj', { timeout: 0 });
+              } catch (error) {
+                  await page.waitForSelector('.css-7i770w', { timeout: 0 });
               }
   
-              if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
-                elements = document.querySelectorAll('.css-1bbjmcj')
-              } else {
-                elements = document.querySelectorAll('.css-7i770w')
-              }
-              const srcs = []
-              for (let j = 0; j < elements.length; j++) {
-                  srcs.push(elements[j].src);
-              }
-              console.log(document.location.href);
-              freeGame = {
-                title: title, 
-                site: "Epic", 
-                //link: urls[i],
-                link: document.location.href,
-                genre: genres.join(' - '),
-                images: srcs,
-              }
-
-              return freeGame
-              //freeGames.push(freeGame)
-
-              //return freeGames
-              //return [title, genres.join(' - '), srcs]
+              const data = await page.evaluate(() => {
+                  const title = document.querySelector('.css-1mzagbj').textContent;
+                  const elements = document.querySelector('.css-vs1xw0').childNodes;
+                  const genres = [];
+                  for (let j = 0; j < elements.length; j++) {
+                      genres.push(elements[j].textContent);
+                  }
   
-          })
-
-          freeGames.push(data)
-        }
+                  let elementsToQuery;
+                  if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
+                      elementsToQuery = document.querySelectorAll('.css-1bbjmcj');
+                  } else {
+                      elementsToQuery = document.querySelectorAll('.css-7i770w');
+                  }
+                  const srcs = [];
+                  for (let j = 0; j < elementsToQuery.length; j++) {
+                      srcs.push(elementsToQuery[j].src);
+                  }
+  
+                  return {
+                      title: title,
+                      site: "Epic",
+                      link: document.location.href,
+                      genre: genres.join(' - '),
+                      images: srcs,
+                  };
+              });
+  
+              freeGames.push(data);
+          }
       } catch (error) {
-        console.log(error)
+          console.log(error);
       } finally {
-        await browser.close()
-
+          if (browser) {
+              await browser.close();
+          }
       }
-
-
-            //return data
-            return freeGames
-
-          
-        }
+  
+      return freeGames;
+  }
+  
         
       
     
