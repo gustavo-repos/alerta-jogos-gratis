@@ -68,14 +68,14 @@ const getFreeGames = async () => {
           console.log(urls[i])
 
 
-          await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
+          await page.goto(urls[i], { waitUntil: 'load', timeout: 5000 });
   
-          await page.waitForSelector('.css-1mzagbj', {timeout: 0})
-          await page.waitForSelector('.css-vs1xw0', {timeout: 0})
+          await page.waitForSelector('.css-1mzagbj', {timeout: 5000})
+          await page.waitForSelector('.css-vs1xw0', {timeout: 5000})
           try {
-              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 5000}) 
           } catch (error) {
-              await page.waitForSelector('.css-7i770w', {timeout: 0})
+              await page.waitForSelector('.css-7i770w', {timeout: 5000})
           } 
   
           const data = await page.evaluate(() => {
