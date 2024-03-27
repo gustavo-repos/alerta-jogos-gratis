@@ -58,70 +58,78 @@ const getFreeGames = async () => {
 
         const browser = await puppeteer.launch(launchOptions)
         
+      try {
         for (var i = 0; i < 10; i++) {
 
-            console.log(urls[i])
+          console.log(urls[i])
 
-            const page = await browser.newPage()
-            await page.setCacheEnabled(false)
-            await page.setExtraHTTPHeaders(headerOptions); 
-            await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
-    
-            await page.waitForSelector('.css-1mzagbj', {timeout: 0})
-            await page.waitForSelector('.css-vs1xw0', {timeout: 0})
-            try {
-                await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
-            } catch (error) {
-                await page.waitForSelector('.css-7i770w', {timeout: 0})
-            } 
-    
-            const data = await page.evaluate(() => {
+          const page = await browser.newPage()
+          await page.setCacheEnabled(false)
+          await page.setExtraHTTPHeaders(headerOptions); 
+          await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
+  
+          await page.waitForSelector('.css-1mzagbj', {timeout: 0})
+          await page.waitForSelector('.css-vs1xw0', {timeout: 0})
+          try {
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+          } catch (error) {
+              await page.waitForSelector('.css-7i770w', {timeout: 0})
+          } 
+  
+          const data = await page.evaluate(() => {
 
-                var freeGame
+              var freeGame
 
-                const title = document.querySelector('.css-1mzagbj').textContent
-    
-                var elements
-    
-                elements = document.querySelector('.css-vs1xw0').childNodes
-                const genres = []
-                for (let j = 0; j < elements.length; j++) {
-                    genres.push(elements[j].textContent);
-                }
-    
-                if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
-                  elements = document.querySelectorAll('.css-1bbjmcj')
-                } else {
-                  elements = document.querySelectorAll('.css-7i770w')
-                }
-                const srcs = []
-                for (let j = 0; j < elements.length; j++) {
-                    srcs.push(elements[j].src);
-                }
-                console.log(document.location.href);
-                freeGame = {
-                  title: title, 
-                  site: "Epic", 
-                  //link: urls[i],
-                  link: document.location.href,
-                  genre: genres.join(' - '),
-                  images: srcs,
-                }
+              const title = document.querySelector('.css-1mzagbj').textContent
+  
+              var elements
+  
+              elements = document.querySelector('.css-vs1xw0').childNodes
+              const genres = []
+              for (let j = 0; j < elements.length; j++) {
+                  genres.push(elements[j].textContent);
+              }
+  
+              if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
+                elements = document.querySelectorAll('.css-1bbjmcj')
+              } else {
+                elements = document.querySelectorAll('.css-7i770w')
+              }
+              const srcs = []
+              for (let j = 0; j < elements.length; j++) {
+                  srcs.push(elements[j].src);
+              }
+              console.log(document.location.href);
+              freeGame = {
+                title: title, 
+                site: "Epic", 
+                //link: urls[i],
+                link: document.location.href,
+                genre: genres.join(' - '),
+                images: srcs,
+              }
 
-                return freeGame
-                //freeGames.push(freeGame)
+              return freeGame
+              //freeGames.push(freeGame)
 
-                //return freeGames
-                //return [title, genres.join(' - '), srcs]
-    
-            })
+              //return freeGames
+              //return [title, genres.join(' - '), srcs]
+  
+          })
 
-            freeGames.push(data)
-          }
+          freeGames.push(data)
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        await browser.close()
+
+      }
+
+
             //return data
-
-            await browser.close()
             return freeGames
+
           
         }
         
