@@ -22,10 +22,10 @@ const getFreeGames = async () => {
     log.push(`Início da atualização da Epic ${date.toLocaleDateString("en-GB")} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
     async function extractHrefValues(url) {
-        const browser = await puppeteer.launch(launchOptions)
+        const browser1 = await puppeteer.launch(launchOptions)
 
         try {
-          const page = await browser.newPage()
+          const page = await browser1.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -44,7 +44,7 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-            await browser.close()
+            await browser1.close()
         }
         
     }
@@ -52,16 +52,16 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(urls) {
-      const freeGames = [];
+      var freeGames = [];
   
-      let browser;
+      let browser2;
       try {
-          for (let i = 0; i < urls.length; i++) {
-              // if(!browser) {
-              //   browser = await puppeteer.launch(launchOptions)
-              // }
-              browser = await puppeteer.launch(launchOptions)
-              const page = await browser.newPage();
+          for (let i = 0; i < 10; i++) {
+              if(!browser2) {
+                browser2 = await puppeteer.launch(launchOptions)
+              }
+              //browser = await puppeteer.launch(launchOptions)
+              const page = await browser2.newPage();
               await page.setCacheEnabled(false);
               await page.setExtraHTTPHeaders(headerOptions);
               page.setDefaultNavigationTimeout(0);
@@ -106,14 +106,14 @@ const getFreeGames = async () => {
   
               freeGames.push(data);
               await page.close(); // Fecha a página após a conclusão da iteração
-              await browser.close()
+              //await browser.close()
           }
       } catch (error) {
           console.log(error);
       } finally {
-          // if (browser) {
-          //     await browser.close();
-          // }
+          if (browser2) {
+              await browser2.close();
+          }
       }
   
       return freeGames;
