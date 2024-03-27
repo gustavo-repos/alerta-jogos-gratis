@@ -52,72 +52,80 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
     async function scrapData(urls) {
-      var freeGames = [];
+      const freeGames = [];
   
-      let browser2;
-      try {
-          for (let i = 0; i < 10; i++) {
-              if(!browser2) {
-                browser2 = await puppeteer.launch(launchOptions)
-              }
-              //browser = await puppeteer.launch(launchOptions)
-              const page = await browser2.newPage();
-              await page.setCacheEnabled(false);
-              await page.setExtraHTTPHeaders(headerOptions);
-              page.setDefaultNavigationTimeout(0);
+      const chunkSize = 5; // Define o tamanho de cada porção do loop assíncrono
+      const chunks = Math.ceil(urls.length / chunkSize); // Calcula o número de porções
   
-              console.log(urls[i]);
-              await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
-              await page.waitForSelector('.css-1mzagbj', { timeout: 0 });
-              await page.waitForSelector('.css-vs1xw0', { timeout: 0 });
+      for (let chunk = 0; chunk < chunks; chunk++) {
+          const start = chunk * chunkSize;
+          const end = Math.min(start + chunkSize, urls.length);
+          const chunkUrls = urls.slice(start, end);
+  
+          const chunkData = await Promise.all(chunkUrls.map(async (url) => {
+              let browser;
               try {
-                  await page.waitForSelector('.css-1bbjmcj', { timeout: 0 });
+                  browser = await puppeteer.launch(launchOptions);
+                  const page = await browser.newPage();
+                  await page.setCacheEnabled(false);
+                  await page.setExtraHTTPHeaders(headerOptions);
+                  page.setDefaultNavigationTimeout(0);
+  
+                  console.log(url);
+                  await page.goto(url, { waitUntil: 'load', timeout: 0 });
+                  await page.waitForSelector('.css-1mzagbj', { timeout: 0 });
+                  await page.waitForSelector('.css-vs1xw0', { timeout: 0 });
+                  try {
+                      await page.waitForSelector('.css-1bbjmcj', { timeout: 0 });
+                  } catch (error) {
+                      await page.waitForSelector('.css-7i770w', { timeout: 0 });
+                  }
+  
+                  const data = await page.evaluate(() => {
+                      const title = document.querySelector('.css-1mzagbj').textContent;
+                      const elements = document.querySelector('.css-vs1xw0').childNodes;
+                      const genres = [];
+                      for (let j = 0; j < elements.length; j++) {
+                          genres.push(elements[j].textContent);
+                      }
+  
+                      let elementsToQuery;
+                      if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
+                          elementsToQuery = document.querySelectorAll('.css-1bbjmcj');
+                      } else {
+                          elementsToQuery = document.querySelectorAll('.css-7i770w');
+                      }
+                      const srcs = [];
+                      for (let j = 0; j < elementsToQuery.length; j++) {
+                          srcs.push(elementsToQuery[j].src);
+                      }
+  
+                      return {
+                          title: title,
+                          site: "Epic",
+                          link: document.location.href,
+                          genre: genres.join(' - '),
+                          images: srcs,
+                      };
+                  });
+  
+                  return data;
               } catch (error) {
-                  await page.waitForSelector('.css-7i770w', { timeout: 0 });
+                  console.log(error);
+                  return null;
+              } finally {
+                  if (browser) {
+                      await browser.close();
+                  }
               }
+          }));
   
-              const data = await page.evaluate(() => {
-                  const title = document.querySelector('.css-1mzagbj').textContent;
-                  const elements = document.querySelector('.css-vs1xw0').childNodes;
-                  const genres = [];
-                  for (let j = 0; j < elements.length; j++) {
-                      genres.push(elements[j].textContent);
-                  }
-  
-                  let elementsToQuery;
-                  if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
-                      elementsToQuery = document.querySelectorAll('.css-1bbjmcj');
-                  } else {
-                      elementsToQuery = document.querySelectorAll('.css-7i770w');
-                  }
-                  const srcs = [];
-                  for (let j = 0; j < elementsToQuery.length; j++) {
-                      srcs.push(elementsToQuery[j].src);
-                  }
-  
-                  return {
-                      title: title,
-                      site: "Epic",
-                      link: document.location.href,
-                      genre: genres.join(' - '),
-                      images: srcs,
-                  };
-              });
-  
-              freeGames.push(data);
-              await page.close(); // Fecha a página após a conclusão da iteração
-              //await browser.close()
-          }
-      } catch (error) {
-          console.log(error);
-      } finally {
-          if (browser2) {
-              await browser2.close();
-          }
+          freeGames.push(...chunkData.filter(Boolean)); // Adiciona dados válidos ao array de resultados
       }
   
       return freeGames;
   }
+  
   
   
         
