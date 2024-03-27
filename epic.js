@@ -21,11 +21,13 @@ const getFreeGames = async () => {
 
     log.push(`Início da atualização da Epic ${date.toLocaleDateString("en-GB")} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
+    var freeGames = [];
+
     async function extractHrefValues(url) {
-        const browser1 = await puppeteer.launch(launchOptions)
+        const browser = await puppeteer.launch(launchOptions)
 
         try {
-          const page = await browser1.newPage()
+          const page = await browser.newPage()
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
           await page.goto(url, { waitUntil: 'load', timeout: 0 });
@@ -44,92 +46,63 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-            await browser1.close()
+            await browser.close()
         }
         
     }
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
-    async function scrapData(urls) {
-      const freeGames = [];
+    async function scrapData(url) {
+        const browser = await puppeteer.launch(launchOptions)
+        console.log(url)
+        try {
+          const page = await browser.newPage()
+          await page.setCacheEnabled(false)
+          await page.setExtraHTTPHeaders(headerOptions); 
+          await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
-      const chunkSize = 5; // Define o tamanho de cada porção do loop assíncrono
-      const chunks = Math.ceil(urls.length / chunkSize); // Calcula o número de porções
+          await page.waitForSelector('.css-1mzagbj', {timeout: 0})
+          await page.waitForSelector('.css-vs1xw0', {timeout: 0})
+          try {
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+          } catch (error) {
+              await page.waitForSelector('.css-7i770w', {timeout: 0})
+          } 
   
-      for (let chunk = 0; chunk < chunks; chunk++) {
-          const start = chunk * chunkSize;
-          const end = Math.min(start + chunkSize, urls.length);
-          const chunkUrls = urls.slice(start, end);
+          const data = await page.evaluate(() => {
+
+              const title = document.querySelector('.css-1mzagbj').textContent
   
-          const chunkData = await Promise.all(chunkUrls.map(async (url) => {
-              let browser;
-              try {
-                  browser = await puppeteer.launch(launchOptions);
-                  const page = await browser.newPage();
-                  await page.setCacheEnabled(false);
-                  await page.setExtraHTTPHeaders(headerOptions);
-                  page.setDefaultNavigationTimeout(0);
+              var elements
   
-                  console.log(url);
-                  await page.goto(url, { waitUntil: 'load', timeout: 0 });
-                  await page.waitForSelector('.css-1mzagbj', { timeout: 0 });
-                  await page.waitForSelector('.css-vs1xw0', { timeout: 0 });
-                  try {
-                      await page.waitForSelector('.css-1bbjmcj', { timeout: 0 });
-                  } catch (error) {
-                      await page.waitForSelector('.css-7i770w', { timeout: 0 });
-                  }
-  
-                  const data = await page.evaluate(() => {
-                      const title = document.querySelector('.css-1mzagbj').textContent;
-                      const elements = document.querySelector('.css-vs1xw0').childNodes;
-                      const genres = [];
-                      for (let j = 0; j < elements.length; j++) {
-                          genres.push(elements[j].textContent);
-                      }
-  
-                      let elementsToQuery;
-                      if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
-                          elementsToQuery = document.querySelectorAll('.css-1bbjmcj');
-                      } else {
-                          elementsToQuery = document.querySelectorAll('.css-7i770w');
-                      }
-                      const srcs = [];
-                      for (let j = 0; j < elementsToQuery.length; j++) {
-                          srcs.push(elementsToQuery[j].src);
-                      }
-  
-                      return {
-                          title: title,
-                          site: "Epic",
-                          link: document.location.href,
-                          genre: genres.join(' - '),
-                          images: srcs,
-                      };
-                  });
-  
-                  return data;
-              } catch (error) {
-                  console.log(error);
-                  return null;
-              } finally {
-                  if (browser) {
-                      await browser.close();
-                  }
+              elements = document.querySelector('.css-vs1xw0').childNodes
+              const genres = []
+              for (let j = 0; j < elements.length; j++) {
+                  genres.push(elements[j].textContent);
               }
-          }));
   
-          freeGames.push(...chunkData.filter(Boolean)); // Adiciona dados válidos ao array de resultados
-      }
+              if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
+                elements = document.querySelectorAll('.css-1bbjmcj')
+              } else {
+                elements = document.querySelectorAll('.css-7i770w')
+              }
+              const srcs = []
+              for (let j = 0; j < elements.length; j++) {
+                  srcs.push(elements[j].src);
+              }
   
-      return freeGames;
-  }
+              return [title, genres.join(' - '), srcs]
   
-  
-  
+          })
+          return data
+        } catch (error) {
+          console.log(error);
+        } finally {
+          await browser.close()
+        }
         
-      
+    }
     
     //var browser = await puppeteer.launch(launchOptions)
     //console.log('Tamanho de link: '+links.length)
@@ -137,27 +110,27 @@ const getFreeGames = async () => {
     //var browserOpen = await puppeteer.launch(launchOptions)
     //for (var i = 48; i < 58; i++) {
 
-    // for (var i = 0; i < links.length; i++) {
-    //     var scrapedData = await scrapData(links[i])        
+    //var scrapedData
+    var freeGame
 
-    //     var freeGame = {
-    //         title: scrapedData[0], 
-    //         site: "Epic", 
-    //         link: links[i],
-    //         genre: scrapedData[1],
-    //         images: scrapedData[2],
-    //       }
-    //       freeGames.push(freeGame)
-
-    // }
-
-    var result = scrapData(links)
+    for (var i = 0; i < 10; i++) {
+        await scrapData(links[i])        
+          .then((result) => {
+            freeGame = {
+              title: result[0], 
+              site: "Epic", 
+              link: links[i],
+              genre: result[1],
+              images: result[2],
+            }
+            freeGames.push(freeGame)
+          })
+    }
 
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
-    
-    return result;
+    return freeGames;
 }
 
 async function sendEpicGames() {
