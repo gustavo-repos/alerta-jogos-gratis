@@ -65,7 +65,7 @@ const getFreeGames = async () => {
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
           try {
-              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+              await page.waitForSelector('.css-1bbjmcj', {timeout: 5000})
           } catch (error) {
               await page.waitForSelector('.css-7i770w', {timeout: 0})
           } 
@@ -113,19 +113,33 @@ const getFreeGames = async () => {
     //var scrapedData
     var freeGame
 
-    for (var i = 166; i < 177; i++) {
-        await scrapData(links[i])        
-          .then((result) => {
-            freeGame = {
-              title: result[0], 
-              site: "Epic", 
-              link: links[i],
-              genre: result[1],
-              images: result[2],
-            }
-            freeGames.push(freeGame)
-          })
-    }
+    links.forEach(link => {
+      scrapData(link)        
+        .then((result) => {
+          freeGame = {
+            title: result[0], 
+            site: "Epic", 
+            link: links[i],
+            genre: result[1],
+            images: result[2],
+          }
+        freeGames.push(freeGame)
+      })
+    });
+
+    // for (var i = 166; i < 177; i++) {
+    //     await scrapData(links[i])        
+    //       .then((result) => {
+    //         freeGame = {
+    //           title: result[0], 
+    //           site: "Epic", 
+    //           link: links[i],
+    //           genre: result[1],
+    //           images: result[2],
+    //         }
+    //         freeGames.push(freeGame)
+    //       })
+    // }
 
     date = new Date()
     endTime = date.getTime()
