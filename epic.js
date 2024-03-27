@@ -22,6 +22,7 @@ const getFreeGames = async () => {
     log.push(`Início da atualização da Epic ${date.toLocaleDateString("en-GB")} às ${parseInt(date.getHours()) - 3}:${String(date.getMinutes()).padStart(2, "0")}`)
 
     var freeGames = [];
+    var freeGame = {}
 
     async function extractHrefValues(url) {
         const browser = await puppeteer.launch(launchOptions)
@@ -53,53 +54,68 @@ const getFreeGames = async () => {
 
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
-    async function scrapData(url) {
+    async function scrapData(urls) {
         const browser = await puppeteer.launch(launchOptions)
-        console.log(url)
-        try {
-          const page = await browser.newPage()
-          await page.setCacheEnabled(false)
-          await page.setExtraHTTPHeaders(headerOptions); 
-          await page.goto(url, { waitUntil: 'load', timeout: 0 });
-  
-          await page.waitForSelector('.css-1mzagbj', {timeout: 0})
-          await page.waitForSelector('.css-vs1xw0', {timeout: 0})
-          try {
-              await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
-          } catch (error) {
-              await page.waitForSelector('.css-7i770w', {timeout: 0})
-          } 
-  
-          const data = await page.evaluate(() => {
+        
+        for (var i = 0; i < 10; i++) {
 
-              const title = document.querySelector('.css-1mzagbj').textContent
-  
-              var elements
-  
-              elements = document.querySelector('.css-vs1xw0').childNodes
-              const genres = []
-              for (let j = 0; j < elements.length; j++) {
-                  genres.push(elements[j].textContent);
-              }
-  
-              if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
-                elements = document.querySelectorAll('.css-1bbjmcj')
-              } else {
-                elements = document.querySelectorAll('.css-7i770w')
-              }
-              const srcs = []
-              for (let j = 0; j < elements.length; j++) {
-                  srcs.push(elements[j].src);
-              }
-  
-              return [title, genres.join(' - '), srcs]
-  
-          })
-          return data
-        } catch (error) {
-          console.log(error);
-        } finally {
-          await browser.close()
+          console.log(urls[i])
+
+          try {
+            const page = await browser.newPage()
+            await page.setCacheEnabled(false)
+            await page.setExtraHTTPHeaders(headerOptions); 
+            await page.goto(urls[i], { waitUntil: 'load', timeout: 0 });
+    
+            await page.waitForSelector('.css-1mzagbj', {timeout: 0})
+            await page.waitForSelector('.css-vs1xw0', {timeout: 0})
+            try {
+                await page.waitForSelector('.css-1bbjmcj', {timeout: 0}) // acho que isso nao pode ser infinito
+            } catch (error) {
+                await page.waitForSelector('.css-7i770w', {timeout: 0})
+            } 
+    
+            const data = await page.evaluate(() => {
+
+                const title = document.querySelector('.css-1mzagbj').textContent
+    
+                var elements
+    
+                elements = document.querySelector('.css-vs1xw0').childNodes
+                const genres = []
+                for (let j = 0; j < elements.length; j++) {
+                    genres.push(elements[j].textContent);
+                }
+    
+                if (document.querySelectorAll('.css-1bbjmcj').length > 0) {
+                  elements = document.querySelectorAll('.css-1bbjmcj')
+                } else {
+                  elements = document.querySelectorAll('.css-7i770w')
+                }
+                const srcs = []
+                for (let j = 0; j < elements.length; j++) {
+                    srcs.push(elements[j].src);
+                }
+    
+                freeGame = {
+                  title: title, 
+                  site: "Epic", 
+                  link: urls[i],
+                  genre: genres.join(' - '),
+                  images: srcs,
+                }
+                freeGames.push(freeGame)
+
+                return freeGames
+                //return [title, genres.join(' - '), srcs]
+    
+            })
+            return data
+          } catch (error) {
+            console.log(error);
+          } finally {
+            await browser.close()
+          }
         }
         
     }
@@ -109,23 +125,28 @@ const getFreeGames = async () => {
     //for (var i = 0; i < 180; i++) { 
     //var browserOpen = await puppeteer.launch(launchOptions)
     //for (var i = 48; i < 58; i++) {
-      links.forEach(async (link) => {
-        var scrapedData = await scrapData(link);
-    
-        var freeGame = {
-            title: scrapedData[0],
-            site: "Epic",
-            link: link,
-            genre: scrapedData[1],
-            images: scrapedData[2],
-        };
-        freeGames.push(freeGame);
-    });
-    
+
+    // for (var i = 0; i < links.length; i++) {
+    //     var scrapedData = await scrapData(links[i])        
+
+    //     var freeGame = {
+    //         title: scrapedData[0], 
+    //         site: "Epic", 
+    //         link: links[i],
+    //         genre: scrapedData[1],
+    //         images: scrapedData[2],
+    //       }
+    //       freeGames.push(freeGame)
+
+    // }
+
+    var result = scrapData(links)
+
     date = new Date()
     endTime = date.getTime()
     log.push(`O scrap durou ${(endTime - startTime)/1000}s.`)
-    return freeGames;
+    
+    return result;
 }
 
 async function sendEpicGames() {
