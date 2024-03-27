@@ -54,9 +54,9 @@ const getFreeGames = async () => {
     var links = await extractHrefValues('https://store.epicgames.com/pt-BR/browse?sortBy=releaseDate&sortDir=DESC&priceTier=tierFree&category=Game&count=300&start=0')
 
 
-    let secondBrowser
+    let secondBrowser = 'closed'
     async function scrapData(url) {
-        if (!secondBrowser) {
+        if (secondBrowser == 'closed') {
           secondBrowser = await puppeteer.launch(launchOptions)
         }
         console.log(url)
@@ -103,7 +103,9 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          if (secondBrowser) await secondBrowser.close()
+          if (secondBrowser != 'closed') {
+            await secondBrowser.close()
+          }
         }
         
     }
