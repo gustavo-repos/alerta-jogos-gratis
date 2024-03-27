@@ -96,11 +96,12 @@ const getFreeGames = async () => {
                 for (let j = 0; j < elements.length; j++) {
                     srcs.push(elements[j].src);
                 }
-    
+                console.log(page.url());
                 freeGame = {
                   title: title, 
                   site: "Epic", 
-                  link: urls[i],
+                  //link: urls[i],
+                  link: page.url(),
                   genre: genres.join(' - '),
                   images: srcs,
                 }
