@@ -60,7 +60,7 @@ const getFreeGames = async () => {
         const page = await browser.newPage()
         await page.setCacheEnabled(false)
         await page.setExtraHTTPHeaders(headerOptions)
-        //page.setDefaultNavigationTimeout(0)
+        page.setDefaultNavigationTimeout(0)
         
       try {
         for (var i = 0; i < 10; i++) {
