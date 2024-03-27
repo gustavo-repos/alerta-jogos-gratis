@@ -60,9 +60,8 @@ const getFreeGames = async () => {
         
         for (var i = 0; i < 10; i++) {
 
-          console.log(urls[i])
+            console.log(urls[i])
 
-          try {
             const page = await browser.newPage()
             await page.setCacheEnabled(false)
             await page.setExtraHTTPHeaders(headerOptions); 
@@ -116,16 +115,15 @@ const getFreeGames = async () => {
             })
 
             freeGames.push(data)
-
-            //return data
-          } catch (error) {
-            console.log(error);
-          } finally {
-            await browser.close()
           }
+            //return data
+
+            await browser.close()
+            return freeGames
+          
         }
         
-    }
+      
     
     //var browser = await puppeteer.launch(launchOptions)
     //console.log('Tamanho de link: '+links.length)
