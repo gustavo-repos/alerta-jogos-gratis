@@ -2,7 +2,7 @@ const launchOptions = {
     userDataDir: '/home/ubuntu/alerta-jogos-gratis/temp',
     executablePath: '/snap/bin/chromium',
     ignoreHTTPSErrors: true,
-    protocolTimeout: 0,
+    //protocolTimeout: 0,
     args: 
     [
         '--disable-background-timer-throttling',
