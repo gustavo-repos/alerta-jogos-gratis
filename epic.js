@@ -13,6 +13,7 @@ process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 
 const { launchOptions, headerOptions } = require('./puppeteerOptions')
 const puppeteer = require('puppeteer-core')
+const treekill = require('tree-kill')
 
 const getFreeGames = async () => {
 
