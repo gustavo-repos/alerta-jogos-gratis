@@ -25,6 +25,7 @@
     "puppeteer-core": "^22.5.0",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "sync-request": "^6.1.0",
+    "tree-kill": "^1.2.2",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
