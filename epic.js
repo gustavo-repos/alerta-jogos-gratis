@@ -66,7 +66,7 @@ const getFreeGames = async () => {
 
       try {
         for (let i = 0; i < urls.length; i++) {
-          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 0 });
+          await page.goto(urls[i], { waitUntil: 'domcontentloaded', timeout: 0 });
 
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
