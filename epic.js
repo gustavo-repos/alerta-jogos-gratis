@@ -76,7 +76,7 @@ const getFreeGames = async () => {
               await page.waitForSelector('.css-7i770w', {timeout: 0})
           } 
 
-          const data = await page.evaluate(() => {
+          const data = await page.evaluate(async function() {
 
             const title = document.querySelector('.css-1mzagbj').textContent
 
