@@ -64,7 +64,7 @@ const getFreeGames = async () => {
           page.setDefaultNavigationTimeout(0)
           await page.setCacheEnabled(false)
           await page.setExtraHTTPHeaders(headerOptions); 
-          page.goto(url, { "waitUntil": "networkidle0", "timeout": "300000" })
+          await page.goto(url, { waitUntil: 'load', timeout: 0 });
   
           await page.waitForSelector('.css-1mzagbj', {timeout: 0})
           await page.waitForSelector('.css-vs1xw0', {timeout: 0})
