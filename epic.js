@@ -48,7 +48,7 @@ const getFreeGames = async () => {
             console.log(error);
         } finally {
             await firstBrowser.close()
-            treekill(browser.process().pid, 'SIGKILL')
+            treekill(firstBrowser.process().pid, 'SIGKILL')
         }
         
     }
@@ -122,7 +122,7 @@ const getFreeGames = async () => {
         console.log(error)
       } finally {
         await secondBrowser.close()
-        treekill(browser.process().pid, 'SIGKILL')
+        treekill(secondBrowser.process().pid, 'SIGKILL')
         return freeGames
       }
 
