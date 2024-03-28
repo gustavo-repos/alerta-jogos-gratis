@@ -24,8 +24,10 @@ const getFreeGames = async () => {
 
     var freeGames = [];
 
+
     async function extractHrefValues(url) {
         const firstBrowser = await puppeteer.launch(launchOptions)
+        var result
 
         try {
           const page = await firstBrowser.newPage()
@@ -76,7 +78,7 @@ const getFreeGames = async () => {
               await page.waitForSelector('.css-7i770w', {timeout: 0})
           } 
 
-          const data = await page.evaluate(async function() {
+          const data = await page.evaluate(() => {
 
             const title = document.querySelector('.css-1mzagbj').textContent
 
@@ -102,17 +104,17 @@ const getFreeGames = async () => {
 
         })
 
-        data
-            .then((result) => {
-              freeGame = {
-                title: result[0], 
-                site: "Epic", 
-                link: urls[i],
-                genre: result[1],
-                images: result[2],
-              }
-              freeGames.push(freeGame)
-            })
+        //result = data
+
+        freeGame = {
+          title: data[0], 
+          site: "Epic", 
+          link: urls[i],
+          genre: data[1],
+          images: data[2],
+        }
+        freeGames.push(freeGame)
+
           
 
 
