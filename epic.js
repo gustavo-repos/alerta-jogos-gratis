@@ -48,8 +48,8 @@ const getFreeGames = async () => {
         } catch (error) {
             console.log(error);
         } finally {
-          treekill(browser.process().pid, 'SIGKILL')
             await browser.close()
+            treekill(browser.process().pid, 'SIGKILL')
         }
         
     }
@@ -104,8 +104,8 @@ const getFreeGames = async () => {
         } catch (error) {
           console.log(error);
         } finally {
-          treekill(browser.process().pid, 'SIGKILL')
           await browser.close()
+          treekill(browser.process().pid, 'SIGKILL')
         }
         
     }

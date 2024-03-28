@@ -54,6 +54,7 @@ const launchOptions = {
         '--incognito',
         '--headless',
         '--disable-gpu',
+        '--single-process'
         ]
 }
 
